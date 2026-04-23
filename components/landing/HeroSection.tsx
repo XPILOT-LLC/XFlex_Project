@@ -1,16 +1,15 @@
 import Image from "next/image";
-import Navbar from "./Navbar";
 
 export default function HeroSection() {
   return (
     <section
       id="home"
       className="relative w-full overflow-hidden"
-      style={{ height: "1026px" }}
+      style={{ height: "100vh", minHeight: "650px", maxHeight: "980px" }}
     >
       <div className="absolute inset-0">
         <Image
-          src="/hero-bg.png"
+          src="/Rectangle%202%20(1).png"
           alt=""
           fill
           priority
@@ -23,37 +22,43 @@ export default function HeroSection() {
 
       <div
         className="relative z-10 mx-auto flex h-full w-full flex-col"
-        style={{ maxWidth: "1440px" }}
+        style={{ maxWidth: "1440px", paddingInline: "clamp(24px, 5.42vw, 78px)" }}
       >
-        <Navbar />
-
-        <div className="relative flex flex-1">
-          <div className="flex flex-col justify-center" style={{ paddingLeft: "78px", paddingTop: "0px" }}>
+        <div className="relative flex flex-1 flex-col lg:block">
+          {/* ── Text column ── */}
+          <div
+            className="flex flex-col justify-center pt-14 text-center lg:text-left"
+            style={{
+              paddingTop: "clamp(132px, 18vh, 210px)",
+              maxWidth: "min(100%, 660px)",
+            }}
+          >
             <h1
-              className="font-medium text-white"
+              className="hero-step-1-left font-medium text-white"
               style={{
-                width: "790px",
-                fontSize: "64px",
-                lineHeight: "94px",
-                letterSpacing: "1.2px",
+                width: "min(100%, 640px)",
+                fontSize: "clamp(26px, 3.55vw, 60px)",
+                lineHeight: "1.07",
+                letterSpacing: "0.01em",
                 fontFamily: "var(--font-poppins), Poppins, sans-serif",
               }}
             >
+              <br />
+              <br />
               Avoid FTA penalties &
               <br />
               stay 100% compliant in
-              <br />
               UAE corporate tax
             </h1>
 
             <p
-              className="font-medium"
+              className="hero-step-1-left font-medium"
               style={{
-                width: "550px",
-                marginTop: "21px",
-                fontSize: "24px",
-                lineHeight: "36px",
-                letterSpacing: "1.2px",
+                width: "min(100%, 500px)",
+                marginTop: "clamp(22px, 3.2vh, 34px)",
+                fontSize: "clamp(14px, 1.45vw, 19px)",
+                lineHeight: "1.45",
+                letterSpacing: "0.02em",
                 color: "rgba(255, 255, 255, 0.70)",
                 fontFamily: "var(--font-poppins), Poppins, sans-serif",
               }}
@@ -63,19 +68,27 @@ export default function HeroSection() {
               15+ years experience
             </p>
 
-            <div className="flex items-center" style={{ marginTop: "80px", gap: "40px" }}>
+            <div
+              className="mx-auto flex w-full flex-col items-center justify-center sm:flex-row lg:mx-0 lg:justify-start"
+              style={{
+                marginTop: "clamp(40px, 9vh, 86px)",
+                gap: "clamp(16px, 2.4vw, 40px)",
+                flexWrap: "wrap",
+              }}
+            >
               <a
                 href="#cta"
-                className="inline-flex items-center justify-center font-medium transition hover:brightness-110"
+                className="hero-step-2-left inline-flex items-center justify-center font-medium transition hover:brightness-110"
                 style={{
-                  width: "302px",
-                  height: "79px",
+                  width: "clamp(188px, 15.5vw, 242px)",
+                  height: "clamp(50px, 4.8vh, 58px)",
                   borderRadius: "12px",
                   background: "#C5A059",
-                  fontSize: "18px",
-                  letterSpacing: "0.015em",
+                  fontSize: "clamp(12px, 0.95vw, 14px)",
+                  letterSpacing: "0.02em",
                   color: "#120f0a",
                   boxShadow: "0 10px 28px rgba(197, 160, 89, 0.18)",
+                  fontFamily: "var(--font-poppins), Poppins, sans-serif",
                 }}
               >
                 Book free consultation
@@ -83,14 +96,15 @@ export default function HeroSection() {
 
               <a
                 href="#services"
-                className="inline-flex items-center justify-center font-medium text-white/[0.92] transition hover:bg-white/[0.06]"
+                className="hero-step-3-right inline-flex items-center justify-center font-medium text-white/[0.92] transition hover:bg-white/[0.06]"
                 style={{
-                  width: "242px",
-                  height: "79px",
+                  width: "clamp(180px, 14.6vw, 210px)",
+                  height: "clamp(50px, 4.8vh, 58px)",
                   borderRadius: "12px",
-                  border: "1px solid #C5A059",
-                  fontSize: "18px",
-                  letterSpacing: "0.015em",
+                  border: "1px solid rgba(197, 160, 89, 0.75)",
+                  fontSize: "clamp(12px, 0.95vw, 14px)",
+                  letterSpacing: "0.02em",
+                  fontFamily: "var(--font-poppins), Poppins, sans-serif",
                 }}
               >
                 Our services
@@ -98,36 +112,31 @@ export default function HeroSection() {
             </div>
           </div>
 
+          {/* ── Image (desktop) ── */}
           <div
-            className="absolute"
+            className="hero-step-1-right absolute hidden lg:block"
             style={{
-              left: "900px",
-              top: "40px",
-              width: "601px",
-              height: "727px",
+              right: "clamp(-24px, -1.6vw, 8px)",
+              top: "clamp(42px, 7.8vh, 98px)",
+              width: "clamp(320px, 31vw, 590px)",
+              aspectRatio: "601 / 686",
             }}
           >
             <div
               className="absolute rounded-full"
               style={{
-                top: "50%",
+                top: "46%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
-                width: "480px",
-                height: "480px",
+                width: "400px",
+                height: "400px",
                 background: "radial-gradient(circle, rgba(197,160,89,0.25) 0%, rgba(197,160,89,0.06) 50%, transparent 72%)",
                 filter: "blur(30px)",
               }}
             />
 
-            <div className="relative" style={{ width: "601px", height: "727px" }}>
-              <div
-                className="absolute"
-                style={{
-                  inset: 0,
-                  zIndex: 1,
-                }}
-              >
+            <div className="relative h-full w-full">
+              <div className="absolute" style={{ inset: 0, zIndex: 1 }}>
                 <div className="relative h-full w-full">
                   <Image
                     src="/Group 1 .png"
@@ -135,75 +144,94 @@ export default function HeroSection() {
                     fill
                     priority
                     className="object-contain object-center"
-                    style={{
-                      transform: "scale(1.12)",
-                    }}
+                    style={{ transform: "translateY(-10px) scale(1.08)" }}
                   />
                 </div>
               </div>
+            </div>
+          </div>
 
-              <div
-                className="absolute flex flex-col items-center"
-                style={{
-                  left: "53%",
-                  bottom: "-125px",
-                  transform: "translateX(-50%)",
-                  zIndex: 3,
-                  width: "220px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "60px",
-                    lineHeight: "105px",
-                    letterSpacing: "0.264px",
-                    textAlign: "center",
-                    background: "linear-gradient(270deg, #C5A059 0%, #E8C88A 50%, #C5A059 100%)",
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                  }}
-                >
-                  +15
-                </div>
+          {/* ── +15 Badge (positioned independently) ── */}
+          <div
+            className="hero-step-4-up absolute hidden lg:flex flex-col items-center"
+            style={{
+              right: "clamp(86px, 11.8vw, 150px)",
+              bottom: "clamp(4px, 1vh, 18px)",
+              zIndex: 3,
+              width: "160px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "clamp(34px, 3.15vw, 58px)",
+                lineHeight: "1",
+                letterSpacing: "0.264px",
+                textAlign: "center",
+                background: "linear-gradient(270deg, #C5A059 0%, #E8C88A 50%, #C5A059 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontFamily: "var(--font-poppins), Poppins, sans-serif",
+              }}
+            >
+              +15
+            </div>
 
-                <span
-                  style={{
-                    marginTop: "4px",
-                    fontSize: "16px",
-                    lineHeight: "20px",
-                    letterSpacing: "0.2px",
-                    color: "#90A1B9",
-                    textAlign: "center",
-                    fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                  }}
-                >
-                  Years Of Excellence
-                </span>
-              </div>
+            <span
+              style={{
+                marginTop: "12px",
+                fontSize: "11px",
+                lineHeight: "16px",
+                letterSpacing: "0.2px",
+                color: "#90A1B9",
+                textAlign: "center",
+                fontFamily: "var(--font-poppins), Poppins, sans-serif",
+              }}
+            >
+              Years Of Excellence
+            </span>
+          </div>
+
+          {/* ── Image (mobile) ── */}
+          <div
+            className="hero-step-1-right relative mx-auto mt-10 block w-[min(92vw,520px)] lg:hidden"
+            style={{ aspectRatio: "601 / 727" }}
+          >
+            <div className="relative h-full w-full">
+              <Image
+                src="/Group 1 .png"
+                alt="Hero graphic"
+                fill
+                priority
+                className="object-contain object-center"
+              />
             </div>
           </div>
         </div>
 
-        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: "20px" }}>
+        {/* Scroll indicator */}
+        <div
+          className="absolute left-1/2 hidden -translate-x-1/2 lg:block"
+          style={{ bottom: "clamp(12px, 3vh, 44px)" }}
+        >
           <div
-            className="flex items-start justify-center"
+            className="hero-scroll-indicator flex items-start justify-center"
             style={{
               width: "28px",
               height: "48px",
               borderRadius: "999px",
-              border: "2px solid rgba(197, 160, 89, 0.65)",
+              border: "2px solid rgba(197, 160, 89, 0.40)",
               padding: "8px 9px 0 9px",
               opacity: 0.85,
             }}
           >
             <div
+              className="hero-scroll-dot"
               style={{
                 width: "6px",
                 height: "14px",
                 borderRadius: "999px",
-                background: "#C5A059",
+                background: "rgba(197, 160, 89, 0.80)",
               }}
             />
           </div>

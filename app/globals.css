@@ -34,6 +34,68 @@ body {
   animation: fade-up 0.9s ease-out both;
 }
 
+.hero-step-1-left {
+  opacity: 0;
+  animation: hero-enter-left 900ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+}
+
+.hero-step-1-right {
+  opacity: 0;
+  animation: hero-enter-right 900ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+}
+
+.hero-step-2-left {
+  opacity: 0;
+  animation: hero-enter-left 800ms cubic-bezier(0.22, 1, 0.36, 1) 1200ms both;
+}
+
+.hero-step-3-right {
+  opacity: 0;
+  animation: hero-enter-right 800ms cubic-bezier(0.22, 1, 0.36, 1) 1500ms both;
+}
+
+.hero-step-4-up {
+  opacity: 0;
+  animation: hero-enter-up 800ms cubic-bezier(0.22, 1, 0.36, 1) 1800ms both;
+}
+
+.hero-scroll-indicator {
+  animation: hero-scroll-shell 2.2s ease-in-out infinite;
+}
+
+.hero-scroll-dot {
+  animation: hero-scroll-dot 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  transform-origin: center top;
+}
+
+.feature-star {
+  animation: feature-star-twinkle 3.2s ease-in-out infinite;
+}
+
+.services-track {
+  scrollbar-width: none;
+}
+
+.services-track::-webkit-scrollbar {
+  display: none;
+}
+
+.about-gold-orb {
+  animation: drift-gold-orb 10s ease-in-out infinite;
+}
+
+.about-gold-orb-delayed {
+  animation: drift-gold-orb-delayed 12s ease-in-out infinite;
+}
+
+.tax-gold-orb {
+  animation: drift-gold-orb 11s ease-in-out infinite;
+}
+
+.tax-gold-orb-delayed {
+  animation: drift-gold-orb-delayed 13s ease-in-out infinite;
+}
+
 @keyframes float-y {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -42,4 +104,136 @@ body {
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hero-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hero-enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(45px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-scroll-shell {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(197, 160, 89, 0);
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(197, 160, 89, 0.16);
+    opacity: 1;
+  }
+}
+
+@keyframes hero-scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(12px);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes feature-star-twinkle {
+  0%, 100% {
+    opacity: 0.28;
+    transform: scale(0.9);
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.5);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.65);
+  }
+  60% {
+    opacity: 0.45;
+    transform: scale(1.05);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.25);
+  }
+}
+
+@keyframes drift-gold-orb {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.9;
+  }
+  35% {
+    transform: translate3d(92px, -54px, 0) scale(1.14);
+    opacity: 1;
+  }
+  70% {
+    transform: translate3d(36px, 86px, 0) scale(0.92);
+    opacity: 0.78;
+  }
+}
+
+@keyframes drift-gold-orb-delayed {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.82;
+  }
+  40% {
+    transform: translate3d(-88px, 58px, 0) scale(1.13);
+    opacity: 0.98;
+  }
+  72% {
+    transform: translate3d(-30px, -82px, 0) scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-step-1-left,
+  .hero-step-1-right,
+  .hero-step-2-left,
+  .hero-step-3-right,
+  .hero-step-4-up,
+  .hero-scroll-indicator,
+  .hero-scroll-dot,
+  .feature-star,
+  .about-gold-orb,
+  .about-gold-orb-delayed,
+  .tax-gold-orb,
+  .tax-gold-orb-delayed {
+    animation: none;
+    opacity: 1;
+  }
 }
