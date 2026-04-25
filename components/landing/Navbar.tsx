@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 const links = [
   { label: "Home", href: "#home" },
@@ -9,6 +12,8 @@ const links = [
 ];
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="fixed left-0 right-0 top-0 z-50 px-4 pt-2 md:px-8 md:pt-[18px]">
       <header
@@ -57,9 +62,19 @@ export default function Navbar() {
           ))}
         </nav>
 
+        <button
+          type="button"
+          onClick={() => setIsOpen((value) => !value)}
+          className="ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white lg:hidden"
+          aria-label="Toggle navigation menu"
+          aria-expanded={isOpen}
+        >
+          <span className="text-lg leading-none">{isOpen ? "x" : "="}</span>
+        </button>
+
         <a
           href="#cta"
-          className="ml-auto inline-flex items-center justify-center rounded-[14px] bg-[#C5A059] font-medium text-[#120f0a] transition hover:brightness-110"
+          className="ml-auto hidden items-center justify-center rounded-[14px] bg-[#C5A059] font-medium text-[#120f0a] transition hover:brightness-110 lg:inline-flex"
           style={{
             width: "clamp(150px, 12.2vw, 184px)",
             height: "clamp(38px, 3vw, 46px)",
@@ -71,6 +86,42 @@ export default function Navbar() {
           Get consultation
         </a>
       </header>
+
+      {isOpen ? (
+        <div className="mx-auto mt-3 w-full max-w-[1380px] rounded-[24px] border border-white/15 bg-[linear-gradient(180deg,rgba(19,24,35,0.96)_0%,rgba(14,18,28,0.98)_100%)] p-5 shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl lg:hidden">
+          <nav className="flex flex-col gap-3">
+            {links.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="rounded-xl px-4 py-3 text-white/85 transition hover:bg-white/5 hover:text-white"
+                style={{
+                  fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                  fontSize: "13px",
+                  lineHeight: "1.4",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          <a
+            href="#cta"
+            onClick={() => setIsOpen(false)}
+            className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-[14px] bg-[#C5A059] font-medium text-[#120f0a] transition hover:brightness-110"
+            style={{
+              fontFamily: "var(--font-poppins), Poppins, sans-serif",
+              fontSize: "13px",
+              letterSpacing: "0.02em",
+            }}
+          >
+            Get consultation
+          </a>
+        </div>
+      ) : null}
     </div>
   );
 }

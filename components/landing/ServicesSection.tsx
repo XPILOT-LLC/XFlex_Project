@@ -1,44 +1,91 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, type TransitionEvent } from "react";
 
 const serviceCards = [
   {
     title: "Taxation Services",
     front: "Expert guidance on complex tax regulations and strategic planning",
-    back: "Corporate tax structuring, filings, advisory reviews, and planning support tailored to UAE business requirements.",
+    back: [
+      "VAT registration and deregistration",
+      "VAT return preparation and filing",
+      "Corporate tax advisory and compliance",
+      "Tax residency certificate assistance",
+      "Tax planning and structuring",
+      "Representation before UAE Federal Tax Authority (FTA)",
+    ],
     icon: "document",
   },
   {
     title: "Auditing Services",
     front: "Comprehensive financial audits and assurance services",
-    back: "Independent audit execution, reporting support, and process reviews that build confidence in your financial controls.",
+    back: [
+      "External and statutory audits",
+      "Internal audits and risk assessments",
+      "Compliance audits",
+      "Forensic audits and fraud investigation",
+      "Financial statement review and certification",
+      "Audit readiness and pre-audit support",
+    ],
     icon: "clipboard",
   },
   {
     title: "ESR & UBO Compliance",
     front: "Simplify your business operations with complete corporate support solutions.",
-    back: "End-to-end ESR and UBO compliance preparation, filing guidance, and documentation checks for regulatory peace of mind.",
+    back: [
+      "ESR assessment and notifications",
+      "ESR reporting and filing",
+      "Ultimate Beneficial Ownership (UBO) compliance setup",
+      "Ongoing regulatory advisory",
+    ],
     icon: "bars",
   },
   {
-    title: "VAT Advisory",
-    front: "Stay compliant with VAT planning, filing workflows, and reporting clarity.",
-    back: "Registration support, return reviews, transaction treatment advice, and VAT risk monitoring for growing businesses.",
+    title: "Administrative and Business Consultancy",
+    front: "streamline operation and grow faster with strategic business advice.",
+    back: [
+      "Business setup and licensing in UAE (Mainland, Free Zone, Offshore)",
+      "PRO services and document clearance",
+      "Trade license renewal and compliance follow-up",
+      "Corporate governance advisory",
+      "Company liquidation and closure assistance",
+      "Restructuring and operational efficiency consulting",
+    ],
     icon: "wallet",
   },
   {
-    title: "Corporate Structuring",
-    front: "Build the right tax and legal structure for sustainable growth.",
-    back: "Business model reviews, restructuring guidance, and expansion planning aligned with tax efficiency and compliance.",
+    title: "Corporate Support Services",
+    front: "Simplify your business operations with complete corporate support solutions.",
+    back: [
+      "Drafting of contracts and MOAs",
+      "Preparation of board resolutions and legal documents",
+      "Translation and attestation services",
+      "Document control and compliance systems",
+      "Administrative outsourcing support",
+    ],
     icon: "layers",
   },
   {
-    title: "Risk Monitoring",
-    front: "Identify issues early with proactive compliance and reporting oversight.",
-    back: "Ongoing deadline tracking, penalty-risk checks, documentation reviews, and strategic issue escalation support.",
+    title: " Accounting & Bookkeeping",
+    front: "stay in control with precise bookkeeping and real-time financial insights.",
+    back: [
+      "Monthly, quarterly, and annual bookkeeping",
+      "Preparation of financial statements (IFRS-compliant)",
+      "Chart of accounts setup and customization",
+      "Payroll processing and WPS compliance",
+      "Accounts payable/receivable management",
+      "Bank reconciliation and cash flow analysis",
+    ],
     icon: "shield",
   },
+];
+
+const clonedCardsPerSide = 3;
+
+const loopedCards = [
+  ...serviceCards.slice(-clonedCardsPerSide),
+  ...serviceCards,
+  ...serviceCards.slice(0, clonedCardsPerSide),
 ];
 
 function ServiceIcon({ type }: { type: string }) {
@@ -99,24 +146,137 @@ function ServiceIcon({ type }: { type: string }) {
 
 export default function ServicesSection() {
   const [activeCard, setActiveCard] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(clonedCardsPerSide);
+  const [cardStep, setCardStep] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isTransitionEnabled, setIsTransitionEnabled] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
+  const skipAnimationRef = useRef(false);
 
-  const scrollByAmount = (amount: number) => {
-    trackRef.current?.scrollBy({ left: amount, behavior: "smooth" });
+  const measureStep = () => {
+    const track = trackRef.current;
+
+    if (!track) {
+      return 0;
+    }
+
+    const firstCard = track.children[0] as HTMLElement | undefined;
+
+    if (!firstCard) {
+      return 0;
+    }
+
+    const styles = window.getComputedStyle(track);
+    const gapValue = styles.columnGap || styles.gap || "16";
+    const gap = Number.parseFloat(gapValue) || 16;
+
+    return firstCard.offsetWidth + gap;
+  };
+
+  useEffect(() => {
+    const syncStep = () => {
+      const nextStep = measureStep();
+      if (nextStep) {
+        setCardStep(nextStep);
+      }
+    };
+
+    syncStep();
+    window.addEventListener("resize", syncStep);
+
+    return () => {
+      window.removeEventListener("resize", syncStep);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!cardStep) {
+      return;
+    }
+
+    if (skipAnimationRef.current) {
+      skipAnimationRef.current = false;
+      return;
+    }
+
+    if (currentIndex === clonedCardsPerSide && !isAnimating) {
+      return;
+    }
+
+    setIsTransitionEnabled(true);
+    setIsAnimating(true);
+  }, [currentIndex, cardStep]);
+
+  const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget || event.propertyName !== "transform") {
+      return;
+    }
+
+    if (
+      currentIndex >= clonedCardsPerSide &&
+      currentIndex < clonedCardsPerSide + serviceCards.length
+    ) {
+      setIsAnimating(false);
+      return;
+    }
+
+    setIsTransitionEnabled(false);
+    skipAnimationRef.current = true;
+    setCurrentIndex(
+      currentIndex < clonedCardsPerSide
+        ? serviceCards.length + currentIndex
+        : currentIndex - serviceCards.length
+    );
+    setIsAnimating(false);
+  };
+
+  useEffect(() => {
+    if (!isTransitionEnabled) {
+      const frame = window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          setIsTransitionEnabled(true);
+        });
+      });
+
+      return () => {
+        window.cancelAnimationFrame(frame);
+      };
+    }
+  }, [isTransitionEnabled]);
+
+  const scrollByCard = (direction: number) => {
+    if (isAnimating || !cardStep) {
+      return;
+    }
+
+    setCurrentIndex((prev) => {
+      const nextIndex = prev + direction;
+
+      if (nextIndex < 0) {
+        return 0;
+      }
+
+      if (nextIndex > loopedCards.length - 1) {
+        return loopedCards.length - 1;
+      }
+
+      return nextIndex;
+    });
   };
 
   return (
-    <section id="services" className="relative overflow-hidden bg-[#05080d] px-0 py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_36%,rgba(197,160,89,0.12),transparent_22%),radial-gradient(circle_at_20%_72%,rgba(197,160,89,0.08),transparent_18%)]" />
-      <div className="absolute left-1/2 top-[110px] hidden h-[390px] w-[390px] -translate-x-1/2 rounded-full border border-[#4b3918]/40 lg:block" />
-      <div className="absolute left-1/2 top-[72px] hidden h-[520px] w-[520px] -translate-x-1/2 [clip-path:polygon(50%_0%,89%_22%,89%_78%,50%_100%,11%_78%,11%_22%)] border border-[#4b3918]/30 lg:block" />
+    <section id="services" className="relative overflow-hidden bg-[#020507] px-0 py-20 lg:py-[78px]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_24%,rgba(197,160,89,0.09),transparent_18%),radial-gradient(circle_at_50%_62%,rgba(197,160,89,0.05),transparent_28%)]" />
+      <div className="absolute left-1/2 top-[88px] hidden h-[420px] w-[420px] -translate-x-1/2 rounded-full border border-[#4f3a18]/20 lg:block" />
+      <div className="absolute left-1/2 top-[36px] hidden h-[540px] w-[540px] -translate-x-1/2 [clip-path:polygon(50%_0%,86%_18%,86%_82%,50%_100%,14%_82%,14%_18%)] border border-[#4f3a18]/25 lg:block" />
+      <div className="absolute left-1/2 top-[94px] hidden h-[360px] w-[360px] -translate-x-1/2 rounded-full border border-dashed border-[#4f3a18]/15 lg:block" />
 
-      <div className="relative mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
+      <div className="relative mx-auto max-w-[1440px] px-4 md:px-8 lg:px-0">
         <div className="text-center">
           <div className="inline-flex items-center gap-3">
-            <span className="h-px w-9 bg-[#9c7738]" />
+            <span className="h-px w-7 bg-[#9c7738]" />
             <p
-              className="text-[10px] uppercase tracking-[0.32em] text-[#a88342]"
+              className="text-[10px] uppercase tracking-[0.34em] text-[#a88342]"
               style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
             >
               Our Services......
@@ -124,16 +284,16 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        <div className="relative z-10 mt-10 flex justify-center">
-          <div className="max-w-[420px] text-center">
+        <div className="relative z-10 mt-12 flex justify-center lg:mt-[30px] lg:justify-start lg:px-[52px]">
+          <div className="max-w-[430px] text-center lg:text-left">
             <h2
               className="text-white"
               style={{
                 fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                fontSize: "clamp(32px,3.2vw,47px)",
-                lineHeight: "1.04",
-                fontWeight: 600,
-                letterSpacing: "-0.04em",
+                fontSize: "clamp(31px,3.35vw,50px)",
+                lineHeight: "1.01",
+                fontWeight: 500,
+                letterSpacing: "-0.045em",
               }}
             >
               Comprehensive solutions for
@@ -141,11 +301,11 @@ export default function ServicesSection() {
               your business
             </h2>
             <p
-              className="mx-auto mt-5 max-w-[320px] text-white/58"
+              className="mx-auto mt-5 max-w-[334px] text-white/58 lg:mx-0"
               style={{
                 fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                fontSize: "13px",
-                lineHeight: "1.45",
+                fontSize: "12.5px",
+                lineHeight: "1.48",
               }}
             >
               From compliance to growth, we cover every step of your financial journey.
@@ -153,103 +313,116 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        <div className="relative z-10 mt-12 overflow-hidden px-0">
+        <div className="relative left-1/2 z-10 mt-12 w-screen -translate-x-1/2 overflow-hidden px-0 lg:mt-[48px] lg:w-[calc(100vw-24px)] lg:max-w-none">
           <div
             ref={trackRef}
-            className="services-track flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pl-[6vw] pr-[6vw] lg:pl-[3vw] lg:pr-[3vw]"
+            onTransitionEnd={handleTransitionEnd}
+            className={`services-track flex gap-4 px-4 pb-4 sm:px-8 lg:gap-[18px] lg:px-0 ${isTransitionEnabled ? "transition-transform duration-[680ms] ease-[cubic-bezier(0.22,1,0.36,1)]" : ""
+              }`}
+            style={{
+              transform: cardStep ? `translate3d(-${currentIndex * cardStep}px, 0, 0)` : "translate3d(0, 0, 0)",
+              willChange: "transform",
+            }}
           >
-          {serviceCards.map((card, index) => {
-            const isFlipped = activeCard === index;
+            {loopedCards.map((card, index) => {
+              const originalIndex =
+                ((index - clonedCardsPerSide) % serviceCards.length + serviceCards.length) %
+                serviceCards.length;
+              const isFlipped = activeCard === originalIndex;
 
-            return (
-              <button
-                key={card.title}
-                type="button"
-                onClick={() => setActiveCard(isFlipped ? null : index)}
-                className="group/service relative h-[292px] w-[86vw] shrink-0 snap-center rounded-[12px] text-left [perspective:1200px] sm:w-[44vw] lg:h-[356px] lg:w-[calc((100%-2rem-6vw)/3)] lg:max-w-[calc((100%-2rem-6vw)/3)]"
-              >
-                <div
-                  className={`relative h-full w-full rounded-[12px] transition-transform duration-700 [transform-style:preserve-3d] ${
-                    isFlipped ? "[transform:rotateY(180deg)]" : ""
-                  } group-hover/service:[transform:rotateY(180deg)]`}
+              return (
+                <button
+                  key={`${card.title}-${index}`}
+                  type="button"
+                  onClick={() => setActiveCard(isFlipped ? null : originalIndex)}
+                  className="group/service relative h-[292px] w-[86vw] shrink-0 rounded-[12px] text-left [perspective:1200px] sm:w-[44vw] lg:h-[430px] lg:w-[calc((100%-36px)/3)] lg:max-w-[calc((100%-36px)/3)]"
                 >
-                  <div className="absolute inset-0 rounded-[12px] border border-[#49505c] bg-[linear-gradient(180deg,#1e242d_0%,#1b2129_100%)] px-12 py-9 shadow-[inset_0_1px_0_rgba(255,255,255,0.03),0_18px_40px_rgba(0,0,0,0.18)] [backface-visibility:hidden]">
-                    <div className="ml-auto flex h-11 w-11 items-center justify-center rounded-[11px] bg-[linear-gradient(180deg,#6d5221_0%,#4a3917_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
-                      <ServiceIcon type={card.icon} />
+                  <div
+                    className={`relative h-full w-full rounded-[12px] transition-transform duration-700 [transform-style:preserve-3d] ${isFlipped ? "[transform:rotateY(180deg)]" : ""
+                      } group-hover/service:[transform:rotateY(180deg)]`}
+                  >
+                    <div className="absolute inset-0 rounded-[12px] border border-[#43505f] bg-[linear-gradient(180deg,#212831_0%,#1f252d_100%)] px-8 py-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_36px_rgba(0,0,0,0.18)] [backface-visibility:hidden] lg:px-[42px] lg:py-[36px]">
+                      <div className="ml-auto flex h-[44px] w-[44px] items-center justify-center rounded-[11px] border border-[#7c5a23] bg-[linear-gradient(180deg,rgba(118,87,37,0.45)_0%,rgba(74,56,23,0.56)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                        <ServiceIcon type={card.icon} />
+                      </div>
+
+                      <h3
+                        className="mt-[96px] text-white"
+                        style={{
+                          fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                          fontSize: "16px",
+                          lineHeight: "1.34",
+                          fontWeight: 500,
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {card.title}
+                      </h3>
+
+                      <p
+                        className="mt-11 max-w-[214px] text-white/50"
+                        style={{
+                          fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                          fontSize: "11.5px",
+                          lineHeight: "1.62",
+                        }}
+                      >
+                        {card.front}
+                      </p>
                     </div>
 
-                    <h3
-                      className="mt-14 text-white"
-                      style={{
-                        fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                        fontSize: "16px",
-                        lineHeight: "1.35",
-                        fontWeight: 500,
-                      }}
-                    >
-                      {card.title}
-                    </h3>
+                    <div className="absolute inset-0 rounded-[12px] border border-[#7a5d2b] bg-[linear-gradient(180deg,#2a2114_0%,#1b1712_100%)] px-9 py-8 shadow-[0_22px_48px_rgba(0,0,0,0.22)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[radial-gradient(circle,rgba(227,176,61,0.28)_0%,rgba(87,63,20,0.65)_100%)]">
+                        <ServiceIcon type={card.icon} />
+                      </div>
 
-                    <p
-                      className="mt-8 max-w-[190px] text-white/55"
-                      style={{
-                        fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                        fontSize: "11px",
-                        lineHeight: "1.72",
-                      }}
-                    >
-                      {card.front}
-                    </p>
-                  </div>
+                      <h3
+                        className="mt-7 text-[#f3dfaf]"
+                        style={{
+                          fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                          fontSize: "16px",
+                          lineHeight: "1.3",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {card.title}
+                      </h3>
 
-                  <div className="absolute inset-0 rounded-[12px] border border-[#7a5d2b] bg-[linear-gradient(180deg,#2a2114_0%,#1b1712_100%)] px-9 py-8 shadow-[0_22px_48px_rgba(0,0,0,0.22)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[radial-gradient(circle,rgba(227,176,61,0.28)_0%,rgba(87,63,20,0.65)_100%)]">
-                      <ServiceIcon type={card.icon} />
+                      <ul
+                        className="mt-5 space-y-2 text-[#d5c39d]"
+                        style={{
+                          fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                          fontSize: "12px",
+                          lineHeight: "1.55",
+                        }}
+                      >
+                        {card.back.map((detail) => (
+                          <li key={detail} className="list-inside list-disc">
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-
-                    <h3
-                      className="mt-7 text-[#f3dfaf]"
-                      style={{
-                        fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                        fontSize: "16px",
-                        lineHeight: "1.3",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {card.title}
-                    </h3>
-
-                    <p
-                      className="mt-5 text-[#d5c39d]"
-                      style={{
-                        fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                        fontSize: "12px",
-                        lineHeight: "1.8",
-                      }}
-                    >
-                      {card.back}
-                    </p>
                   </div>
-                </div>
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="mt-6 flex justify-center gap-4">
+        <div className="mt-6 flex justify-center gap-4 lg:mt-[28px]">
           <button
             type="button"
-            onClick={() => scrollByAmount(-280)}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1e3048] text-[#d4a64d] transition hover:brightness-110"
+            onClick={() => scrollByCard(-1)}
+            className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#18304a] text-[#d4a64d] transition hover:brightness-110"
             aria-label="Scroll services left"
           >
             {"<"}
           </button>
           <button
             type="button"
-            onClick={() => scrollByAmount(280)}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1e3048] text-[#d4a64d] transition hover:brightness-110"
+            onClick={() => scrollByCard(1)}
+            className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#18304a] text-[#d4a64d] transition hover:brightness-110"
             aria-label="Scroll services right"
           >
             {">"}

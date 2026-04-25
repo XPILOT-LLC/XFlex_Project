@@ -178,7 +178,7 @@ export default function FooterSection() {
             lineHeight: "1.4",
           }}
         >
-          © 2020 Lift Media. All right reserved
+          &copy; 2020 Lift Media. All right reserved
         </p>
 
         <div className="flex flex-wrap gap-4 md:gap-6">

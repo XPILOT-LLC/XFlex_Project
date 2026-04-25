@@ -1,11 +1,29 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function HeroSection() {
+  const steps = [2, 5, 7, 10, 12, 15];
+  const [yearsCount, setYearsCount] = useState(2);
+
+  useEffect(() => {
+    const timers = steps.map((value, index) =>
+      window.setTimeout(() => {
+        setYearsCount(value);
+      }, 1900 + index * 320)
+    );
+
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+    };
+  }, []);
+
   return (
     <section
       id="home"
       className="relative w-full overflow-hidden"
-      style={{ height: "100vh", minHeight: "650px", maxHeight: "980px" }}
+      style={{ height: "100vh", minHeight: "720px", maxHeight: "980px" }}
     >
       <div className="absolute inset-0">
         <Image
@@ -27,9 +45,9 @@ export default function HeroSection() {
         <div className="relative flex flex-1 flex-col lg:block">
           {/* ── Text column ── */}
           <div
-            className="flex flex-col justify-center pt-14 text-center lg:text-left"
+            className="flex flex-col justify-start pt-0 text-center lg:justify-center lg:text-left"
             style={{
-              paddingTop: "clamp(132px, 18vh, 210px)",
+              paddingTop: "clamp(84px, 12vh, 210px)",
               maxWidth: "min(100%, 660px)",
             }}
           >
@@ -37,14 +55,12 @@ export default function HeroSection() {
               className="hero-step-1-left font-medium text-white"
               style={{
                 width: "min(100%, 640px)",
-                fontSize: "clamp(26px, 3.55vw, 60px)",
-                lineHeight: "1.07",
+                fontSize: "clamp(22px, 8vw, 60px)",
+                lineHeight: "1.08",
                 letterSpacing: "0.01em",
                 fontFamily: "var(--font-poppins), Poppins, sans-serif",
               }}
             >
-              <br />
-              <br />
               Avoid FTA penalties &
               <br />
               stay 100% compliant in
@@ -55,8 +71,8 @@ export default function HeroSection() {
               className="hero-step-1-left font-medium"
               style={{
                 width: "min(100%, 500px)",
-                marginTop: "clamp(22px, 3.2vh, 34px)",
-                fontSize: "clamp(14px, 1.45vw, 19px)",
+                marginTop: "clamp(14px, 2.2vh, 34px)",
+                fontSize: "clamp(12px, 3.6vw, 19px)",
                 lineHeight: "1.45",
                 letterSpacing: "0.02em",
                 color: "rgba(255, 255, 255, 0.70)",
@@ -71,8 +87,8 @@ export default function HeroSection() {
             <div
               className="mx-auto flex w-full flex-col items-center justify-center sm:flex-row lg:mx-0 lg:justify-start"
               style={{
-                marginTop: "clamp(40px, 9vh, 86px)",
-                gap: "clamp(16px, 2.4vw, 40px)",
+                marginTop: "clamp(22px, 5vh, 86px)",
+                gap: "clamp(12px, 2.4vw, 40px)",
                 flexWrap: "wrap",
               }}
             >
@@ -139,7 +155,7 @@ export default function HeroSection() {
               <div className="absolute" style={{ inset: 0, zIndex: 1 }}>
                 <div className="relative h-full w-full">
                   <Image
-                    src="/Group 1 .png"
+                    src="/Group 2.png"
                     alt="Hero graphic"
                     fill
                     priority
@@ -155,8 +171,9 @@ export default function HeroSection() {
           <div
             className="hero-step-4-up absolute hidden lg:flex flex-col items-center"
             style={{
-              right: "clamp(86px, 11.8vw, 150px)",
-              bottom: "clamp(4px, 1vh, 18px)",
+              left: "calc(100% - clamp(320px, 31vw, 590px) / 2 + clamp(-24px, -1.6vw, 8px))",
+              bottom: "clamp(8px, 1.4vh, 24px)",
+              transform: "translateX(-50%)",
               zIndex: 3,
               width: "160px",
             }}
@@ -174,7 +191,7 @@ export default function HeroSection() {
                 fontFamily: "var(--font-poppins), Poppins, sans-serif",
               }}
             >
-              +15
+              +{yearsCount}
             </div>
 
             <span
@@ -194,12 +211,12 @@ export default function HeroSection() {
 
           {/* ── Image (mobile) ── */}
           <div
-            className="hero-step-1-right relative mx-auto mt-10 block w-[min(92vw,520px)] lg:hidden"
+            className="hero-step-1-right relative mx-auto mt-6 block w-[min(76vw,320px)] lg:hidden"
             style={{ aspectRatio: "601 / 727" }}
           >
             <div className="relative h-full w-full">
               <Image
-                src="/Group 1 .png"
+                src="/Group 2.png"
                 alt="Hero graphic"
                 fill
                 priority

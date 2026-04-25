@@ -1,6 +1,7 @@
 import AboutTrustSection from "../../components/landing/AboutTrustSection";
 import Navbar from "../../components/landing/Navbar";
-import TestimonialsSection from "../components/TestimonialsSection";
+import TestimonialsSection from "../../components/sections/TestimonialsSection";
+import TeamSection from "../../components/landing/TeamSection";
 import CTASection from "../../components/landing/CTASection";
 import FeaturesSection from "../../components/landing/FeaturesSection";
 import FooterSection from "../../components/landing/FooterSection";
@@ -27,6 +28,7 @@ export default function LandingPage() {
       <ServicesSection />
       <TaxStructureSection />
       <TestimonialsSection />
+      <TeamSection />
       <CTASection />
       <FooterSection />
     </main>
