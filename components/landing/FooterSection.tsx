@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const quickLinks = [
   { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
-  { label: "About", href: "#features" },
   { label: "Pricing", href: "#pricing" },
   { label: "Contact", href: "#cta" },
 ];
@@ -149,7 +149,7 @@ export default function FooterSection() {
               fontWeight: 500,
             }}
           >
-            Newz
+            News
           </h3>
 
           <ul className="mt-4 space-y-2.5">

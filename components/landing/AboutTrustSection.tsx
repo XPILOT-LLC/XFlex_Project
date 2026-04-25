@@ -60,6 +60,7 @@ function AboutCard({
 export default function AboutTrustSection() {
   return (
     <motion.section
+      id="about"
       className="relative overflow-hidden bg-[#080d14] px-6 py-20 md:px-10 md:py-24 lg:px-14 lg:py-28"
       initial="hidden"
       whileInView="show"

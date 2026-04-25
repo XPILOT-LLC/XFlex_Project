@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 const links = [
   { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
-  { label: "About", href: "#features" },
   { label: "Pricing", href: "#pricing" },
   { label: "Contact", href: "#cta" },
 ];
@@ -17,32 +17,54 @@ export default function Navbar() {
 
   useEffect(() => {
     const sections = links
-      .map((link) => document.querySelector(link.href))
-      .filter((section): section is Element => section !== null);
+      .map((link) => ({
+        href: link.href,
+        section: document.querySelector(link.href),
+      }))
+      .filter((item): item is { href: string; section: Element } => item.section !== null);
 
     if (!sections.length) {
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    let frameId = 0;
 
-        if (visibleEntry?.target.id) {
-          setActiveHref(`#${visibleEntry.target.id}`);
+    const syncActiveSection = () => {
+      window.cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(() => {
+        const isAtPageBottom =
+          window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8;
+
+        if (isAtPageBottom) {
+          setActiveHref(links[links.length - 1].href);
+          return;
         }
-      },
-      {
-        rootMargin: "-34% 0px -54% 0px",
-        threshold: [0.08, 0.18, 0.32, 0.5],
-      }
-    );
 
-    sections.forEach((section) => observer.observe(section));
+        const activeLine = window.scrollY + window.innerHeight * 0.34;
+        let currentHref = links[0].href;
 
-    return () => observer.disconnect();
+        for (const { href, section } of sections) {
+          const rect = section.getBoundingClientRect();
+          const top = rect.top + window.scrollY;
+
+          if (activeLine >= top) {
+            currentHref = href;
+          }
+        }
+
+        setActiveHref(currentHref);
+      });
+    };
+
+    syncActiveSection();
+    window.addEventListener("scroll", syncActiveSection, { passive: true });
+    window.addEventListener("resize", syncActiveSection);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", syncActiveSection);
+      window.removeEventListener("resize", syncActiveSection);
+    };
   }, []);
 
   return (
@@ -58,6 +80,7 @@ export default function Navbar() {
       >
         <a
           href="#home"
+          onClick={() => setActiveHref("#home")}
           className="relative flex shrink-0 items-center"
           style={{ width: "112px", height: "54px" }}
         >
@@ -81,6 +104,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
+              onClick={() => setActiveHref(link.href)}
               className={`group relative px-1 pb-1 font-medium transition duration-300 ${
                 activeHref === link.href
                   ? "text-white drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
@@ -114,6 +138,7 @@ export default function Navbar() {
 
         <a
           href="#cta"
+          onClick={() => setActiveHref("#cta")}
           className="ml-auto hidden items-center justify-center rounded-[14px] bg-[#C5A059] font-medium text-[#120f0a] transition hover:brightness-110 lg:inline-flex"
           style={{
             width: "clamp(150px, 12.2vw, 184px)",
@@ -134,7 +159,10 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setActiveHref(link.href);
+                  setIsOpen(false);
+                }}
                 className={`group relative rounded-xl px-4 py-3 transition duration-300 ${
                   activeHref === link.href
                     ? "bg-white/6 text-white shadow-[0_0_18px_rgba(214,168,78,0.16)]"
@@ -159,7 +187,10 @@ export default function Navbar() {
 
           <a
             href="#cta"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setActiveHref("#cta");
+              setIsOpen(false);
+            }}
             className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-[14px] bg-[#C5A059] font-medium text-[#120f0a] transition hover:brightness-110"
             style={{
               fontFamily: "var(--font-poppins), Poppins, sans-serif",

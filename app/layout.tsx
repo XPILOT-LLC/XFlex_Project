@@ -18,6 +18,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "XFLEX Landing",
   description: "XFLEX tax and auditing landing page",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

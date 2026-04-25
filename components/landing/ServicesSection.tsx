@@ -327,7 +327,7 @@ export default function ServicesSection() {
           <div
             ref={trackRef}
             onTransitionEnd={handleTransitionEnd}
-            className={`services-track flex gap-4 px-4 pb-4 sm:px-8 lg:gap-[18px] lg:px-0 ${isTransitionEnabled ? "transition-transform duration-[680ms] ease-[cubic-bezier(0.22,1,0.36,1)]" : ""
+            className={`services-track flex gap-4 px-4 py-8 sm:px-8 lg:gap-[18px] lg:px-0 ${isTransitionEnabled ? "transition-transform duration-[680ms] ease-[cubic-bezier(0.22,1,0.36,1)]" : ""
               }`}
             style={{
               transform: cardStep ? `translate3d(${peekOffset - currentIndex * cardStep}px, 0, 0)` : "translate3d(0, 0, 0)",
