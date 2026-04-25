@@ -80,7 +80,7 @@ const serviceCards = [
   },
 ];
 
-const clonedCardsPerSide = 3;
+const clonedCardsPerSide = 4;
 
 const loopedCards = [
   ...serviceCards.slice(-clonedCardsPerSide),
@@ -148,36 +148,43 @@ export default function ServicesSection() {
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(clonedCardsPerSide);
   const [cardStep, setCardStep] = useState(0);
+  const [peekOffset, setPeekOffset] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isTransitionEnabled, setIsTransitionEnabled] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const skipAnimationRef = useRef(false);
+  const isAnimatingRef = useRef(false);
 
-  const measureStep = () => {
+  const measureTrack = () => {
     const track = trackRef.current;
 
     if (!track) {
-      return 0;
+      return { step: 0, offset: 0 };
     }
 
     const firstCard = track.children[0] as HTMLElement | undefined;
 
     if (!firstCard) {
-      return 0;
+      return { step: 0, offset: 0 };
     }
 
     const styles = window.getComputedStyle(track);
     const gapValue = styles.columnGap || styles.gap || "16";
     const gap = Number.parseFloat(gapValue) || 16;
+    const cardWidth = firstCard.offsetWidth;
 
-    return firstCard.offsetWidth + gap;
+    return {
+      step: cardWidth + gap,
+      offset: cardWidth / 2 + gap,
+    };
   };
 
   useEffect(() => {
     const syncStep = () => {
-      const nextStep = measureStep();
-      if (nextStep) {
-        setCardStep(nextStep);
+      const nextTrack = measureTrack();
+      if (nextTrack.step) {
+        setCardStep(nextTrack.step);
+        setPeekOffset(nextTrack.offset);
       }
     };
 
@@ -217,6 +224,7 @@ export default function ServicesSection() {
       currentIndex < clonedCardsPerSide + serviceCards.length
     ) {
       setIsAnimating(false);
+      isAnimatingRef.current = false;
       return;
     }
 
@@ -228,6 +236,7 @@ export default function ServicesSection() {
         : currentIndex - serviceCards.length
     );
     setIsAnimating(false);
+    isAnimatingRef.current = false;
   };
 
   useEffect(() => {
@@ -245,23 +254,24 @@ export default function ServicesSection() {
   }, [isTransitionEnabled]);
 
   const scrollByCard = (direction: number) => {
-    if (isAnimating || !cardStep) {
+    if (isAnimatingRef.current || isAnimating || !cardStep) {
       return;
     }
 
-    setCurrentIndex((prev) => {
-      const nextIndex = prev + direction;
+    const firstVisibleIndex = 1;
+    const lastVisibleIndex = loopedCards.length - 4;
+    const nextIndex = Math.min(
+      Math.max(currentIndex + direction, firstVisibleIndex),
+      lastVisibleIndex
+    );
 
-      if (nextIndex < 0) {
-        return 0;
-      }
+    if (nextIndex === currentIndex) {
+      return;
+    }
 
-      if (nextIndex > loopedCards.length - 1) {
-        return loopedCards.length - 1;
-      }
-
-      return nextIndex;
-    });
+    isAnimatingRef.current = true;
+    setIsAnimating(true);
+    setCurrentIndex(nextIndex);
   };
 
   return (
@@ -313,14 +323,14 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        <div className="relative left-1/2 z-10 mt-12 w-screen -translate-x-1/2 overflow-hidden px-0 lg:mt-[48px] lg:w-[calc(100vw-24px)] lg:max-w-none">
+        <div className="relative left-1/2 z-10 mt-12 w-screen -translate-x-1/2 overflow-hidden px-0 lg:mt-[48px] lg:max-w-none">
           <div
             ref={trackRef}
             onTransitionEnd={handleTransitionEnd}
             className={`services-track flex gap-4 px-4 pb-4 sm:px-8 lg:gap-[18px] lg:px-0 ${isTransitionEnabled ? "transition-transform duration-[680ms] ease-[cubic-bezier(0.22,1,0.36,1)]" : ""
               }`}
             style={{
-              transform: cardStep ? `translate3d(-${currentIndex * cardStep}px, 0, 0)` : "translate3d(0, 0, 0)",
+              transform: cardStep ? `translate3d(${peekOffset - currentIndex * cardStep}px, 0, 0)` : "translate3d(0, 0, 0)",
               willChange: "transform",
             }}
           >
@@ -335,19 +345,20 @@ export default function ServicesSection() {
                   key={`${card.title}-${index}`}
                   type="button"
                   onClick={() => setActiveCard(isFlipped ? null : originalIndex)}
-                  className="group/service relative h-[292px] w-[86vw] shrink-0 rounded-[12px] text-left [perspective:1200px] sm:w-[44vw] lg:h-[430px] lg:w-[calc((100%-36px)/3)] lg:max-w-[calc((100%-36px)/3)]"
+                  className="group/service relative h-[292px] w-[86vw] shrink-0 rounded-[12px] text-left [perspective:1200px] sm:w-[44vw] lg:h-[430px] lg:w-[calc((100vw-72px)/4)]"
                 >
                   <div
                     className={`relative h-full w-full rounded-[12px] transition-transform duration-700 [transform-style:preserve-3d] ${isFlipped ? "[transform:rotateY(180deg)]" : ""
                       } group-hover/service:[transform:rotateY(180deg)]`}
                   >
-                    <div className="absolute inset-0 rounded-[12px] border border-[#43505f] bg-[linear-gradient(180deg,#212831_0%,#1f252d_100%)] px-8 py-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_36px_rgba(0,0,0,0.18)] [backface-visibility:hidden] lg:px-[42px] lg:py-[36px]">
-                      <div className="ml-auto flex h-[44px] w-[44px] items-center justify-center rounded-[11px] border border-[#7c5a23] bg-[linear-gradient(180deg,rgba(118,87,37,0.45)_0%,rgba(74,56,23,0.56)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                    <div className="absolute inset-0 overflow-hidden rounded-[12px] border border-[#43505f] bg-[linear-gradient(180deg,#212831_0%,#1f252d_100%)] px-8 py-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_36px_rgba(0,0,0,0.18)] transition duration-300 group-hover/service:border-[#e2b13f]/45 group-hover/service:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_18px_rgba(219,168,51,0.14),0_22px_50px_rgba(0,0,0,0.34)] [backface-visibility:hidden] lg:px-[42px] lg:py-[36px]">
+                      <div className="pointer-events-none absolute inset-0 rounded-[12px] bg-[radial-gradient(circle_at_50%_0%,rgba(226,177,63,0.10),transparent_44%)] opacity-0 transition-opacity duration-300 group-hover/service:opacity-100" />
+                      <div className="relative ml-auto flex h-[44px] w-[44px] items-center justify-center rounded-[11px] border border-[#7c5a23] bg-[linear-gradient(180deg,rgba(118,87,37,0.45)_0%,rgba(74,56,23,0.56)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-shadow duration-300 group-hover/service:shadow-[0_0_18px_rgba(219,168,51,0.20),inset_0_1px_0_rgba(255,255,255,0.08)]">
                         <ServiceIcon type={card.icon} />
                       </div>
 
                       <h3
-                        className="mt-[96px] text-white"
+                        className="relative mt-[96px] text-white"
                         style={{
                           fontFamily: "var(--font-poppins), Poppins, sans-serif",
                           fontSize: "16px",
@@ -360,7 +371,7 @@ export default function ServicesSection() {
                       </h3>
 
                       <p
-                        className="mt-11 max-w-[214px] text-white/50"
+                        className="relative mt-11 max-w-[214px] text-white/50"
                         style={{
                           fontFamily: "var(--font-poppins), Poppins, sans-serif",
                           fontSize: "11.5px",
@@ -371,13 +382,14 @@ export default function ServicesSection() {
                       </p>
                     </div>
 
-                    <div className="absolute inset-0 rounded-[12px] border border-[#7a5d2b] bg-[linear-gradient(180deg,#2a2114_0%,#1b1712_100%)] px-9 py-8 shadow-[0_22px_48px_rgba(0,0,0,0.22)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[radial-gradient(circle,rgba(227,176,61,0.28)_0%,rgba(87,63,20,0.65)_100%)]">
+                    <div className="absolute inset-0 overflow-hidden rounded-[12px] border border-[#43505f] bg-[linear-gradient(180deg,#212831_0%,#1f252d_100%)] px-9 py-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_36px_rgba(0,0,0,0.18)] transition duration-300 group-hover/service:border-[#e2b13f]/45 group-hover/service:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_0_18px_rgba(219,168,51,0.14),0_22px_50px_rgba(0,0,0,0.34)] [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                      <div className="pointer-events-none absolute inset-0 rounded-[12px] bg-[radial-gradient(circle_at_50%_0%,rgba(226,177,63,0.10),transparent_44%)] opacity-0 transition-opacity duration-300 group-hover/service:opacity-100" />
+                      <div className="relative flex h-10 w-10 items-center justify-center rounded-[11px] border border-[#43505f] bg-[#202730] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-shadow duration-300 group-hover/service:shadow-[0_0_18px_rgba(219,168,51,0.18),inset_0_1px_0_rgba(255,255,255,0.04)]">
                         <ServiceIcon type={card.icon} />
                       </div>
 
                       <h3
-                        className="mt-7 text-[#f3dfaf]"
+                        className="relative mt-7 text-[#f3dfaf]"
                         style={{
                           fontFamily: "var(--font-poppins), Poppins, sans-serif",
                           fontSize: "16px",
@@ -389,7 +401,7 @@ export default function ServicesSection() {
                       </h3>
 
                       <ul
-                        className="mt-5 space-y-2 text-[#d5c39d]"
+                        className="relative mt-5 space-y-2 text-[#d5c39d]"
                         style={{
                           fontFamily: "var(--font-poppins), Poppins, sans-serif",
                           fontSize: "12px",

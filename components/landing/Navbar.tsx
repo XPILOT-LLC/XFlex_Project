@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const links = [
   { label: "Home", href: "#home" },
@@ -13,6 +13,37 @@ const links = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState(links[0].href);
+
+  useEffect(() => {
+    const sections = links
+      .map((link) => document.querySelector(link.href))
+      .filter((section): section is Element => section !== null);
+
+    if (!sections.length) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleEntry?.target.id) {
+          setActiveHref(`#${visibleEntry.target.id}`);
+        }
+      },
+      {
+        rootMargin: "-34% 0px -54% 0px",
+        threshold: [0.08, 0.18, 0.32, 0.5],
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="fixed left-0 right-0 top-0 z-50 px-4 pt-2 md:px-8 md:pt-[18px]">
@@ -50,7 +81,11 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="font-medium text-white/80 transition hover:text-white"
+              className={`group relative px-1 pb-1 font-medium transition duration-300 ${
+                activeHref === link.href
+                  ? "text-white drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
+                  : "text-white/80 hover:text-white hover:drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
+              }`}
               style={{
                 fontSize: "11px",
                 lineHeight: "14px",
@@ -58,6 +93,11 @@ export default function Navbar() {
               }}
             >
               {link.label}
+              <span
+                className={`absolute -bottom-1 left-1/2 h-px -translate-x-1/2 rounded-full bg-[#D6A84E] shadow-[0_0_12px_rgba(214,168,78,0.9)] transition-all duration-300 ${
+                  activeHref === link.href ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+                }`}
+              />
             </a>
           ))}
         </nav>
@@ -95,7 +135,11 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl px-4 py-3 text-white/85 transition hover:bg-white/5 hover:text-white"
+                className={`group relative rounded-xl px-4 py-3 transition duration-300 ${
+                  activeHref === link.href
+                    ? "bg-white/6 text-white shadow-[0_0_18px_rgba(214,168,78,0.16)]"
+                    : "text-white/85 hover:bg-white/5 hover:text-white hover:shadow-[0_0_18px_rgba(214,168,78,0.14)]"
+                }`}
                 style={{
                   fontFamily: "var(--font-poppins), Poppins, sans-serif",
                   fontSize: "13px",
@@ -104,6 +148,11 @@ export default function Navbar() {
                 }}
               >
                 {link.label}
+                <span
+                  className={`absolute bottom-2 left-4 h-px rounded-full bg-[#D6A84E] shadow-[0_0_12px_rgba(214,168,78,0.9)] transition-all duration-300 ${
+                    activeHref === link.href ? "w-10 opacity-100" : "w-0 opacity-0 group-hover:w-10 group-hover:opacity-100"
+                  }`}
+                />
               </a>
             ))}
           </nav>

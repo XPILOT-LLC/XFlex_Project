@@ -11,13 +11,25 @@ const testimonials: TestimonialItem[] = [
     name: "Mohammed Al Nuaimi",
     role: "Managing Director - SME (Dubai)",
     text: "We received a penalty from the FTA and didn’t know how to proceed. XFLEX handled the case professionally and managed all communication with the authority. Their structured approach and expertise made a stressful situation much easier to handle.",
-    image: "/avatars/avatar1.jpg",
+    image: "/avatar/4.png",
   },
   {
     name: "Fatima Al Suwaidi",
     role: "Finance Manager - Retail Group (UAE)",
     text: "We were struggling with related party transactions and documentation. XFLEX guided us step by step and prepared everything professionally. Their work gave us confidence during review. Highly recommended for companies dealing with complex structures.",
-    image: "/avatars/avatar2.jpg",
+    image: "/avatar/1.jpg",
+  },
+  {
+    name: "Ahmed Al Kaabi",
+    role: "Managing Director - SME (Dhabi)",
+    text: "Working with XFLEX was a turning point for our business. We had concerns regarding Corporate Tax compliance and potential penalties, and their team handled everything professionally from start to finish. They explained complex tax matters in a very clear way and represented us confidently before the FTA. I highly recommend XFLEX to any company that wants peace of mind when dealing with tax authorities.",
+    image: "/avatar/3.png",
+  },
+  {
+    name: "Sara Al Mansoori",
+    role: "Founder – Startup (UAE)",
+    text: "XFLEX provided exceptional support during a critical time for our company. We received an FTA inquiry and were unsure how to respond, but their team stepped in immediately and managed the entire process. Their knowledge, responsiveness, and structured approach made a huge difference. Thanks to them, we resolved the issue smoothly and avoided unnecessary complications.",
+    image: "/avatar/2.webp",
   },
 ];
 
@@ -50,37 +62,29 @@ export default function TestimonialsSection() {
     <section className="relative overflow-hidden bg-[#04060A] py-24 md:py-32">
       {/* Background Effects */}
       <div className="pointer-events-none absolute inset-0">
-        {/* Core Intense Gold Glow matching the photo exactly */}
-        <div className="absolute left-[-10%] top-[0%] h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(201,169,110,0.22)_0%,rgba(201,169,110,0)_70%)] blur-[60px]" />
-        
-        {/* Ambient Broad Gold Glow */}
-        <div className="absolute left-[-20%] top-[-10%] h-[1200px] w-[1200px] rounded-full bg-[radial-gradient(circle,rgba(201,169,110,0.12)_0%,rgba(201,169,110,0.03)_50%,rgba(0,0,0,0)_80%)] blur-[90px]" />
+        <div className="absolute -left-[170px] -top-[96px] h-[430px] w-[430px] rounded-full bg-[radial-gradient(circle_at_48%_48%,rgba(201,169,110,0.30)_0%,rgba(132,103,48,0.16)_34%,rgba(201,169,110,0)_70%)] blur-[36px] md:-left-[158px] md:-top-[84px]" />
 
-        {/* Massive Dashed Concentric Circles with fading mask */}
-        <svg 
-          className="absolute left-0 top-0 h-full w-[100vw] opacity-75" 
-          viewBox="0 0 1200 800" 
-          fill="none" 
+        <svg
+          className="absolute -left-[176px] -top-[176px] h-[440px] w-[440px] opacity-95 md:-left-[166px] md:-top-[166px] md:h-[485px] md:w-[485px]"
+          viewBox="0 0 485 485"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="xMinYMin slice"
+          aria-hidden="true"
         >
           <defs>
-            <radialGradient id="circleFade" cx="150" cy="150" r="800" gradientUnits="userSpaceOnUse">
-              <stop stopColor="white" stopOpacity="1" />
-              <stop offset="0.4" stopColor="white" stopOpacity="0.6" />
-              <stop offset="0.7" stopColor="white" stopOpacity="0" />
-            </radialGradient>
-            <mask id="fadeMask">
-              <rect width="100%" height="100%" fill="url(#circleFade)" />
+            <mask id="testimonialCircleFade">
+              <linearGradient id="testimonialCircleMask" x1="0" y1="84" x2="394" y2="274" gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" />
+                <stop offset="0.64" stopColor="white" stopOpacity="0.95" />
+                <stop offset="1" stopColor="white" stopOpacity="0" />
+              </linearGradient>
+              <rect width="485" height="485" fill="black" />
+              <rect width="485" height="485" fill="url(#testimonialCircleMask)" />
             </mask>
           </defs>
-          <g mask="url(#fadeMask)">
-            {/* The concentric dashed circles mimicking the sweeping pattern in the image */}
-            <circle cx="150" cy="150" r="220" stroke="#C9A96E" strokeWidth="1.5" strokeDasharray="10 14" opacity="0.8" />
-            <circle cx="150" cy="150" r="400" stroke="#C9A96E" strokeWidth="1.5" strokeDasharray="10 14" opacity="0.6" />
-            <circle cx="150" cy="150" r="580" stroke="#C9A96E" strokeWidth="1.5" strokeDasharray="10 14" opacity="0.4" />
-            <circle cx="150" cy="150" r="760" stroke="#C9A96E" strokeWidth="1.5" strokeDasharray="10 14" opacity="0.25" />
-            <circle cx="150" cy="150" r="940" stroke="#C9A96E" strokeWidth="1.5" strokeDasharray="10 14" opacity="0.15" />
+          <g mask="url(#testimonialCircleFade)">
+            <circle cx="214" cy="236" r="114" stroke="#C9A96E" strokeWidth="1.45" strokeDasharray="3.5 6.5" opacity="0.72" />
+            <circle cx="214" cy="236" r="146" stroke="#C9A96E" strokeWidth="1.45" strokeDasharray="7 8" opacity="0.62" />
           </g>
         </svg>
       </div>

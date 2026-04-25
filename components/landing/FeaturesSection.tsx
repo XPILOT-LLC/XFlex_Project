@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 const features = [
   {
     icon: "lightning",
@@ -76,9 +80,12 @@ function FeatureIcon({ type }: { type: string }) {
 
 export default function FeaturesSection() {
   return (
-    <section
+    <motion.section
       id="features"
       className="relative overflow-hidden bg-[#0b1017] px-6 py-24 md:px-10 lg:px-14"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: false, amount: 0.26 }}
     >
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_70%,rgba(18,25,38,0.75),transparent_42%),radial-gradient(circle_at_78%_35%,rgba(197,160,89,0.08),transparent_28%)]" />
@@ -99,7 +106,18 @@ export default function FeaturesSection() {
 
       <div className="relative mx-auto max-w-[1320px]">
         <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
-        <div className="max-w-[620px]">
+        <motion.div
+          className="max-w-[620px]"
+          variants={{
+            hidden: { opacity: 0, x: -140, filter: "blur(12px)" },
+            show: {
+              opacity: 1,
+              x: 0,
+              filter: "blur(0px)",
+              transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+            },
+          }}
+        >
           <div className="flex items-center gap-3">
             <span className="h-px w-8 bg-[#b18a44]" />
             <p
@@ -151,10 +169,34 @@ export default function FeaturesSection() {
             ready to grow.
           </p>
 
-          <div className="mt-10 space-y-7">
+          <motion.div
+            className="mt-10 space-y-7"
+            variants={{
+              hidden: {},
+              show: {
+                transition: {
+                  staggerChildren: 0.13,
+                  delayChildren: 0.22,
+                },
+              },
+            }}
+          >
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={feature.title}
+                variants={{
+                  hidden: {
+                    opacity: 0,
+                    x: index % 2 === 0 ? -110 : 110,
+                    filter: "blur(10px)",
+                  },
+                  show: {
+                    opacity: 1,
+                    x: 0,
+                    filter: "blur(0px)",
+                    transition: { duration: 0.72, ease: [0.16, 1, 0.3, 1] },
+                  },
+                }}
                 className={`flex max-w-[480px] items-start gap-4 ${
                   index === 1 ? "ml-0 md:ml-24" : ""
                 } ${index === 2 ? "ml-0 md:ml-40" : ""}`}
@@ -185,13 +227,25 @@ export default function FeaturesSection() {
                     {feature.description}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
 
-        <div className="relative mx-auto w-full max-w-[490px]">
+        <motion.div
+          className="relative mx-auto w-full max-w-[490px]"
+          variants={{
+            hidden: { opacity: 0, x: 150, rotateY: -22, filter: "blur(14px)" },
+            show: {
+              opacity: 1,
+              x: 0,
+              rotateY: 0,
+              filter: "blur(0px)",
+              transition: { duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 },
+            },
+          }}
+        >
           <div className="absolute inset-0 rounded-[24px] bg-[radial-gradient(circle_at_48%_44%,rgba(208,172,91,0.22),transparent_22%),radial-gradient(circle_at_60%_50%,rgba(208,172,91,0.12),transparent_42%)] blur-2xl" />
 
           <div
@@ -300,10 +354,21 @@ export default function FeaturesSection() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-        <div className="mt-14 flex justify-center">
+        <motion.div
+          className="mt-14 flex justify-center"
+          variants={{
+            hidden: { opacity: 0, y: 46, scale: 0.92 },
+            show: {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.5 },
+            },
+          }}
+        >
           <a
             href="#cta"
             className="inline-flex h-[52px] w-[202px] items-center justify-center rounded-[10px] bg-[#caa24f] text-[#17110a] transition hover:brightness-110"
@@ -316,8 +381,8 @@ export default function FeaturesSection() {
           >
             Book free consultation
           </a>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

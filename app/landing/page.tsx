@@ -1,6 +1,6 @@
 import AboutTrustSection from "../../components/landing/AboutTrustSection";
 import Navbar from "../../components/landing/Navbar";
-import TestimonialsSection from "../../components/sections/TestimonialsSection";
+import TestimonialsSection from "../../components/landing/TestimonialsSection";
 import TeamSection from "../../components/landing/TeamSection";
 import CTASection from "../../components/landing/CTASection";
 import FeaturesSection from "../../components/landing/FeaturesSection";

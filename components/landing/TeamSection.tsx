@@ -1,7 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Custom Star Component
+const GlowingStar = ({ className }: { className?: string }) => (
+  <div className={`absolute flex items-center justify-center ${className}`}>
+    <div className="absolute h-4 w-4 animate-pulse rounded-full bg-white/40 blur-[4px]" />
+    <div className="absolute h-8 w-8 animate-pulse rounded-full bg-white/10 blur-[8px]" />
+    <svg
+      className="relative z-10 text-white/90"
+      width="12" height="12"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M12 2L13.5 9.5H21L15 14L16.5 21.5L12 17L7.5 21.5L9 14L3 9.5H10.5L12 2Z" />
+    </svg>
+  </div>
+);
 
 type TeamMember = {
   name: string;
@@ -23,208 +40,187 @@ const teamMembers: TeamMember[] = [
       "15+ Years Experience",
       "Specialist in Corporate Tax & VAT",
     ],
-    image: "/person.png",
+    image: "/team member/PICTURE.jpeg",
   },
   {
-    name: "Sarah Al Mansoori",
-    role: "TAX DIRECTOR",
+    name: "Falak Yussouf",
+    role: "International Financial Expert",
     description:
       "Helping UAE businesses stay compliant with practical tax structuring, reporting, and advisory support.",
     bullets: [
-      "Corporate Tax Advisory Lead",
-      "FTA Compliance Specialist",
-      "Cross-Border Tax Planning",
-      "Audit-Ready Documentation",
+      "International & UAE Tax Expert",
+      "FCA (UK)",
+      "30+ Years Experience",
+      "Cross-border Tax Specialist",
     ],
-    image: "/person.png",
+    image: "/team member/WhatsApp-Image-2026-03-02-at-12.29.14-AM.jpeg",
   },
   {
-    name: "Omar Al Kaabi",
-    role: "SENIOR CONSULTANT",
+    name: "Kader Khan",
+    role: "Tax Expert",
     description:
       "Focused on clear tax execution, risk reduction, and operational support for growing companies in the UAE.",
     bullets: [
-      "VAT & ESR Compliance",
-      "Tax Health Check Reviews",
-      "SME Structuring Support",
-      "Ongoing Filing Oversight",
+      "Senior Tax Consultant",
+      "Chartered Accountant",
+      "20+ Years Experience",
+      "VAT & Corporate Tax Expert",
     ],
-    image: "/person.png",
+    image: "/team member/WhatsApp-Image-2026-03-03-at-12.00.50-AM.jpeg",
   },
 ];
-
-function mod(index: number, total: number) {
-  return (index + total) % total;
-}
 
 export default function TeamSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActiveIndex((current) => mod(current + 1, teamMembers.length));
-    }, 5000);
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % teamMembers.length);
+  };
 
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const visibleCards = useMemo(
-    () => [
-      teamMembers[mod(activeIndex - 1, teamMembers.length)],
-      teamMembers[activeIndex],
-      teamMembers[mod(activeIndex + 1, teamMembers.length)],
-    ],
-    [activeIndex]
-  );
-
-  const activeMember = teamMembers[activeIndex];
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+  };
 
   const handleSwipeEnd = (touchEndX: number) => {
-    if (touchStartX === null) {
-      return;
-    }
-
+    if (touchStartX === null) return;
     const delta = touchStartX - touchEndX;
-
     if (Math.abs(delta) < 40) {
       setTouchStartX(null);
       return;
     }
-
-    setActiveIndex((current) =>
-      mod(current + (delta > 0 ? 1 : -1), teamMembers.length)
-    );
+    if (delta > 0) handleNext();
+    else handlePrev();
     setTouchStartX(null);
   };
 
+  const activeMember = teamMembers[activeIndex];
+
   return (
-    <section className="relative overflow-hidden bg-[#05080F] px-4 py-20 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_24%,rgba(201,166,70,0.12)_0%,transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.01)_0%,rgba(255,255,255,0)_100%)]" />
-        <div className="absolute left-[8%] top-0 h-[420px] w-[420px] bg-[radial-gradient(circle,rgba(201,166,70,0.12)_0%,transparent_68%)] blur-3xl" />
-        <div className="absolute left-[36%] top-[-12%] h-[160%] w-[34%] -rotate-[18deg] bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.05)_18%,transparent_35%,transparent_100%)] opacity-40" />
+    <section className="relative w-full overflow-hidden bg-[#0A0D14] py-24 lg:py-32">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom_right,#0b0e14_0%,#121824_100%)] pointer-events-none" />
+
+      {/* Sweeping Light Streaks */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-10%] h-[350px] w-[120%] -rotate-[35deg] bg-gradient-to-l from-transparent via-white/[0.06] to-transparent blur-[90px]" />
+        <div className="absolute top-[15%] left-[-20%] h-[250px] w-[150%] -rotate-[35deg] bg-gradient-to-r from-transparent via-white/[0.04] to-transparent blur-[80px]" />
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-[1180px] gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(360px,430px)] lg:items-center lg:gap-10">
-        <div className="max-w-[560px]">
-          <h2
-            className="text-[clamp(2.2rem,5vw,3.75rem)] font-medium leading-[1.04] tracking-[-0.05em] text-white"
-            style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
-          >
-            Meet Our <span className="text-[#D5A746]">Team</span>
-          </h2>
+      {/* Stars */}
+      <GlowingStar className="left-[27%] top-[12%]" />
+      <GlowingStar className="left-[4%] top-[26%]" />
+      <GlowingStar className="bottom-[14%] left-[8%]" />
+      <GlowingStar className="bottom-[22%] left-[50%]" />
+      <GlowingStar className="right-[16%] bottom-[28%]" />
 
-          <p
-            className="mt-5 max-w-[420px] text-[14px] leading-[1.8] text-[#B9C2CF] sm:text-[15px]"
-            style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
-          >
-            {activeMember.description}
-          </p>
+      <div className="relative z-10 mx-auto max-w-[1240px] px-6 lg:px-8">
+        <div className="flex flex-col items-center lg:flex-row lg:items-stretch lg:justify-between gap-16 lg:gap-8">
 
-          <ul className="mt-8 space-y-4 text-[#CFD7E2]">
-            {activeMember.bullets.map((bullet) => (
-              <li
-                key={bullet}
-                className="flex items-start gap-3 text-[13px] leading-[1.7] sm:text-[14px]"
-                style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
-              >
-                <span className="mt-[10px] block h-[4px] w-[4px] rounded-full bg-[#D5A746]" />
-                <span>{bullet}</span>
-              </li>
-            ))}
-          </ul>
+          {/* LEFT COLUMN */}
+          <div className="flex w-full flex-col items-start lg:w-1/2 lg:justify-between">
+            <div className="w-full">
+              <h2 className="text-[44px] font-bold leading-tight text-white md:text-[56px] lg:text-[64px]" style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}>
+                Meet Our <span className="text-[#C9A96E]">Team</span>
+              </h2>
 
-          <a
-            href="#contact-form"
-            className="mt-10 inline-flex min-h-[54px] items-center justify-center rounded-[10px] bg-[#D5AF5A] px-8 text-[13px] font-medium text-[#11151F] shadow-[0_10px_32px_rgba(213,175,90,0.18)] transition duration-300 hover:brightness-105"
-            style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
-          >
-            Book free consultation
-          </a>
-        </div>
+              <p className="mt-6 max-w-[420px] text-[15px] leading-relaxed text-[#A0AABF] md:text-[16px]" style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}>
+                Best Corporate Tax Consultant in UAE with 20+ years of experience as international tax consultants.
+              </p>
 
-        <div className="flex flex-col items-center lg:items-end">
-          <div
-            className="relative flex h-[372px] w-full max-w-[430px] items-center justify-center overflow-hidden sm:h-[408px]"
-            onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
-            onTouchEnd={(event) => handleSwipeEnd(event.changedTouches[0]?.clientX ?? 0)}
-          >
-            {visibleCards.map((member, index) => {
-              const isCenter = index === 1;
-              const isLeft = index === 0;
-
-              return (
-                <button
-                  key={`${member.name}-${index}-${activeIndex}`}
-                  type="button"
-                  onClick={() =>
-                    setActiveIndex(
-                      isCenter
-                        ? activeIndex
-                        : mod(activeIndex + (isLeft ? -1 : 1), teamMembers.length)
-                    )
-                  }
-                  className={`absolute flex w-[178px] flex-col rounded-[6px] border border-white/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.03)_100%)] p-[10px] text-left shadow-[0_20px_50px_rgba(0,0,0,0.26)] backdrop-blur-[2px] transition-all duration-500 ease-in-out sm:w-[188px] ${
-                    isCenter
-                      ? "z-20 scale-100 opacity-100"
-                      : "z-10 scale-90 opacity-55 hover:opacity-80"
-                  } ${
-                    isCenter
-                      ? "translate-x-0"
-                      : isLeft
-                        ? "-translate-x-[88px] sm:-translate-x-[118px]"
-                        : "translate-x-[88px] sm:translate-x-[118px]"
-                  }`}
-                  aria-label={`Show ${member.name}`}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`info-${activeIndex}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full"
                 >
-                  <div className="relative aspect-[0.88] w-full overflow-hidden rounded-[4px] bg-[#222833]">
+                  <ul className="mt-12 flex w-full max-w-[460px] flex-col items-center gap-3.5 pl-4 text-center text-[15px] text-[#9eb0d0] md:pl-24 md:text-[16px]" style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}>
+                    {activeMember.bullets.map((bullet, idx) => (
+                      <li key={idx}>• {bullet}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Button */}
+            <div className="mt-14 w-full">
+              <button className="rounded-[10px] bg-[#C9A96E] px-8 py-3.5 text-[15px] font-semibold text-[#111111] shadow-[0_10px_20px_rgba(201,169,110,0.2)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110" style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}>
+                Book free consultation
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="flex w-full flex-col items-center lg:w-1/2 pt-10 lg:pt-0">
+            <div
+              className="relative"
+              onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+              onTouchEnd={(e) => handleSwipeEnd(e.changedTouches[0].clientX)}
+            >
+              {/* Offset Stacked Shadow Card */}
+              <div className="absolute -bottom-6 -left-8 right-8 top-6 rounded-[24px] bg-[#1a1e28] shadow-[0_20px_50px_rgba(0,0,0,0.8)]" />
+
+              {/* Main Image Card with Slide Animation */}
+              <div className="relative h-[440px] w-[320px] overflow-hidden rounded-[24px] border border-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.6)] md:h-[500px] md:w-[380px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`card-${activeIndex}`}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className="absolute inset-0 flex flex-col justify-end"
+                  >
                     <Image
-                      src={member.image}
-                      alt={member.name}
+                      src={activeMember.image}
+                      alt={activeMember.name}
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,10,16,0.04)_0%,rgba(7,10,16,0.22)_72%,rgba(7,10,16,0.55)_100%)]" />
-                  </div>
 
-                  <div className="rounded-b-[4px] bg-[linear-gradient(180deg,#343A45_0%,#2A313C_100%)] px-3 py-3 text-center">
-                    <p
-                      className="text-[11px] font-medium uppercase tracking-[0.02em] text-white"
-                      style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
-                    >
-                      {member.name}
-                    </p>
-                    <p
-                      className="mt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-[#D5A746]"
-                      style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
-                    >
-                      {member.role}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
+                    {/* Bottom Frosted Overlay */}
+                    <div className="relative z-10 flex h-[110px] w-full flex-col items-center justify-center border-t border-white/20 bg-gradient-to-b from-[#404652]/80 to-[#2c313a]/95 backdrop-blur-md md:h-[120px]">
+                      <h3 className="text-[19px] font-bold tracking-wide text-white md:text-[20px] uppercase" style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}>
+                        {activeMember.name}
+                      </h3>
+                      <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.2em] text-[#C9A96E] md:text-[13px]" style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}>
+                        {activeMember.role}
+                      </p>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Navigation Arrows */}
+            <div className="relative z-20 mt-10 flex gap-4 md:mt-14">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-[#1e2532] text-[#C9A96E] transition-all duration-300 hover:bg-[#273040] hover:shadow-[0_0_15px_rgba(201,169,110,0.15)]"
+                aria-label="Previous team member"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-[#1e2532] text-[#C9A96E] transition-all duration-300 hover:bg-[#273040] hover:shadow-[0_0_15px_rgba(201,169,110,0.15)]"
+                aria-label="Next team member"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+            </div>
           </div>
 
-          <div className="mt-5 flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => setActiveIndex((current) => mod(current - 1, teamMembers.length))}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#16304A] text-[#D5A746] transition-all duration-300 hover:bg-[#224463] hover:shadow-[0_0_18px_rgba(201,166,70,0.18)]"
-              aria-label="Previous team member"
-            >
-              &#8592;
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveIndex((current) => mod(current + 1, teamMembers.length))}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#16304A] text-[#D5A746] transition-all duration-300 hover:bg-[#224463] hover:shadow-[0_0_18px_rgba(201,166,70,0.18)]"
-              aria-label="Next team member"
-            >
-              &#8594;
-            </button>
-          </div>
         </div>
       </div>
     </section>
