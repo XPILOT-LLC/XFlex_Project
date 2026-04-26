@@ -1,14 +1,19 @@
+"use client";
+
 import Image from "next/image";
+import { useI18n } from "@/lib/i18n";
 
-const quickLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Contact", href: "#cta" },
-];
+const navLinks = [
+  { key: "home", href: "#home" },
+  { key: "about", href: "#about" },
+  { key: "services", href: "#services" },
+  { key: "pricing", href: "#pricing" },
+  { key: "contact", href: "#cta" },
+] as const;
 
-function ContactIcon({ type }: { type: "email" | "phone" | "location" }) {
+type ContactIconType = "email" | "phone" | "location";
+
+function ContactIcon({ type }: { type: ContactIconType }) {
   if (type === "email") {
     return (
       <svg viewBox="0 0 24 24" className="h-[14px] w-[14px]" fill="none">
@@ -17,7 +22,6 @@ function ContactIcon({ type }: { type: "email" | "phone" | "location" }) {
       </svg>
     );
   }
-
   if (type === "phone") {
     return (
       <svg viewBox="0 0 24 24" className="h-[14px] w-[14px]" fill="none">
@@ -25,7 +29,6 @@ function ContactIcon({ type }: { type: "email" | "phone" | "location" }) {
       </svg>
     );
   }
-
   return (
     <svg viewBox="0 0 24 24" className="h-[14px] w-[14px]" fill="none">
       <path d="M12 20s5-5.2 5-9a5 5 0 1 0-10 0c0 3.8 5 9 5 9Z" stroke="#C79E43" strokeWidth="1.5" strokeLinejoin="round" />
@@ -34,40 +37,19 @@ function ContactIcon({ type }: { type: "email" | "phone" | "location" }) {
   );
 }
 
-function ContactRow({
-  type,
-  label,
-  value,
-}: {
-  type: "email" | "phone" | "location";
-  label: string;
-  value: string;
-}) {
+function ContactRow({ type, label, value }: { type: ContactIconType; label: string; value: string }) {
+  const { isRTL } = useI18n();
+  const fontFamily = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
   return (
     <div className="flex items-start gap-3">
       <div className="mt-0.5 flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[8px] bg-[linear-gradient(180deg,#3F3218_0%,#2E2412_100%)]">
         <ContactIcon type={type} />
       </div>
       <div>
-        <div
-          className="uppercase text-[#6E7682]"
-          style={{
-            fontFamily: "var(--font-poppins), Poppins, sans-serif",
-            fontSize: "7px",
-            lineHeight: "1.2",
-            letterSpacing: "0.18em",
-          }}
-        >
+        <div className="uppercase text-[#6E7682]" style={{ fontFamily, fontSize: "7px", lineHeight: "1.2", letterSpacing: "0.18em" }}>
           {label}
         </div>
-        <div
-          className="mt-1 text-[#D2D7DF]"
-          style={{
-            fontFamily: "var(--font-poppins), Poppins, sans-serif",
-            fontSize: "11px",
-            lineHeight: "1.5",
-          }}
-        >
+        <div className="mt-1 text-[#D2D7DF]" style={{ fontFamily, fontSize: "11px", lineHeight: "1.5" }}>
           {value}
         </div>
       </div>
@@ -75,125 +57,123 @@ function ContactRow({
   );
 }
 
+const socialLinks = [
+  {
+    key: "followFacebook",
+    href: "https://facebook.com",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+      </svg>
+    ),
+  },
+  {
+    key: "followInstagram",
+    href: "https://instagram.com",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+      </svg>
+    ),
+  },
+  {
+    key: "followLinkedIn",
+    href: "https://linkedin.com",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+      </svg>
+    ),
+  },
+] as const;
+
 export default function FooterSection() {
+  const { t, isRTL } = useI18n();
+  const fontFamily = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
+
   return (
     <footer className="border-t border-white/6 bg-[#0B0F15] px-6 py-10 md:px-12">
       <div className="mx-auto grid max-w-[1100px] gap-10 md:grid-cols-[1.8fr_0.7fr_0.6fr]">
+        {/* Column 1 — Brand + Contact */}
         <div>
           <div className="relative h-[54px] w-[72px]">
             <Image src="/logo.png" alt="XFLEX" fill className="object-contain object-left" />
           </div>
 
-          <p
-            className="mt-2 text-white"
-            style={{
-              fontFamily: "var(--font-poppins), Poppins, sans-serif",
-              fontSize: "12px",
-              lineHeight: "1.35",
-              fontWeight: 600,
-            }}
-          >
-            Professional Tax Firm in Dubai,UAE
+          <p className="mt-2 text-white" style={{ fontFamily, fontSize: "12px", lineHeight: "1.35", fontWeight: 600 }}>
+            {t("footer.tagline")}
           </p>
 
           <div className="mt-5 space-y-4">
-            <ContactRow type="email" label="EMAIL" value="x@xflex.ae" />
-            <ContactRow type="phone" label="PHONE" value="00971504772299" />
-            <ContactRow
-              type="location"
-              label="LOCATION"
-              value="Al Khabeesi Building - Office:(1-01) 4th St - Al Khabaisi -Deira -DubaiUAE"
-            />
+            <ContactRow type="email" label={t("footer.emailLabel")} value="x@xflex.ae" />
+            <ContactRow type="phone" label={t("footer.phoneLabel")} value="00971504772299" />
+            <ContactRow type="location" label={t("footer.locationLabel")} value={t("footer.locationValue")} />
+          </div>
+
+          {/* Social icons */}
+          <div className="mt-8 flex gap-3.5">
+            {socialLinks.map((social) => (
+              <a
+                key={social.key}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 w-11 md:h-8 md:w-8 items-center justify-center rounded-full bg-[linear-gradient(180deg,#3F3218_0%,#2E2412_100%)] text-[#C79E43] transition-all duration-300 hover:scale-110 hover:shadow-[0_0_12px_rgba(199,158,67,0.3)] hover:text-[#f4d18c]"
+                aria-label={t(`footer.${social.key}`)}
+              >
+                {social.icon}
+              </a>
+            ))}
           </div>
         </div>
 
+        {/* Column 2 — Quick Links */}
         <div>
-          <h3
-            className="text-[#D1A54B]"
-            style={{
-              fontFamily: "var(--font-poppins), Poppins, sans-serif",
-              fontSize: "10px",
-              lineHeight: "1.2",
-              fontWeight: 500,
-            }}
-          >
-            Quick links
+          <h3 className="text-[#D1A54B]" style={{ fontFamily, fontSize: "10px", lineHeight: "1.2", fontWeight: 500 }}>
+            {t("footer.quickLinks")}
           </h3>
-
           <ul className="mt-4 space-y-2.5">
-            {quickLinks.map((link) => (
-              <li key={link.label}>
-                <a
-                  href={link.href}
-                  className="text-[#D6D9DE] transition hover:text-white"
-                  style={{
-                    fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                    fontSize: "10px",
-                    lineHeight: "1.4",
-                  }}
-                >
-                  {link.label}
+            {navLinks.map((link) => (
+              <li key={link.key}>
+                <a href={link.href} className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white" style={{ fontFamily, fontSize: "10px", lineHeight: "1.4" }}>
+                  {t(`nav.${link.key}`)}
                 </a>
               </li>
             ))}
           </ul>
         </div>
 
+        {/* Column 3 — News/FAQ */}
         <div>
-          <h3
-            className="text-[#D1A54B]"
-            style={{
-              fontFamily: "var(--font-poppins), Poppins, sans-serif",
-              fontSize: "10px",
-              lineHeight: "1.2",
-              fontWeight: 500,
-            }}
-          >
-            News
+          <h3 className="text-[#D1A54B]" style={{ fontFamily, fontSize: "10px", lineHeight: "1.2", fontWeight: 500 }}>
+            {t("footer.news")}
           </h3>
-
           <ul className="mt-4 space-y-2.5">
             <li>
-              <a
-                href="#"
-                className="text-[#D6D9DE] transition hover:text-white"
-                style={{
-                  fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                  fontSize: "10px",
-                  lineHeight: "1.4",
-                }}
-              >
-                FAQ
+              <a href="#" className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white" style={{ fontFamily, fontSize: "10px", lineHeight: "1.4" }}>
+                {t("footer.faq")}
               </a>
             </li>
           </ul>
         </div>
       </div>
 
+      {/* Bottom bar */}
       <div className="mx-auto mt-8 flex max-w-[1100px] flex-col gap-3 border-t border-white/6 pt-5 text-[#B1B7C1] md:flex-row md:items-center md:justify-between">
-        <p
-          style={{
-            fontFamily: "var(--font-poppins), Poppins, sans-serif",
-            fontSize: "8px",
-            lineHeight: "1.4",
-          }}
-        >
-          &copy; 2020 Lift Media. All right reserved
+        <p style={{ fontFamily, fontSize: "8px", lineHeight: "1.4" }}>
+          {t("footer.copyright")}
         </p>
-
         <div className="flex flex-wrap gap-4 md:gap-6">
-          {["Term of Use", "Privacy Policy", "Cookie Policy"].map((item) => (
+          {(["termOfUse", "privacyPolicy", "cookiePolicy"] as const).map((item) => (
             <a
               key={item}
               href="#"
-              className="underline underline-offset-2 transition hover:text-white"
-              style={{
-                fontFamily: "var(--font-poppins), Poppins, sans-serif",
-                fontSize: "8px",
-                lineHeight: "1.4",
-              }}
+              className="block py-2 md:inline md:py-0 underline underline-offset-2 transition hover:text-white"
+              style={{ fontFamily, fontSize: "8px", lineHeight: "1.4" }}
             >
-              {item}
+              {t(`footer.${item}`)}
             </a>
           ))}
         </div>

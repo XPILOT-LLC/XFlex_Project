@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { Poppins, Inter } from "next/font/google";
+import { Poppins, Inter, Cairo } from "next/font/google";
 import "./globals.css";
+import FloatingButtons from "../components/ui/FloatingButtons";
+import { I18nProvider } from "@/lib/i18n";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,9 +17,17 @@ const inter = Inter({
   display: "swap",
 });
 
+const cairo = Cairo({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-cairo",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "XFLEX Landing",
-  description: "XFLEX tax and auditing landing page",
+  title: "XFLEX — UAE Tax & Auditing Experts",
+  description:
+    "Professional tax and auditing solutions tailored for businesses in the UAE.",
   icons: {
     icon: "/logo.png",
     shortcut: "/logo.png",
@@ -31,8 +41,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} ${inter.variable}`}>{children}</body>
+    <html lang="en" dir="ltr">
+      <body
+        className={`${poppins.variable} ${inter.variable} ${cairo.variable} relative overflow-x-hidden w-full`}
+      >
+        <I18nProvider>
+          {children}
+          <FloatingButtons />
+        </I18nProvider>
+      </body>
     </html>
   );
 }

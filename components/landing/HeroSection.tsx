@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useI18n } from "@/lib/i18n";
 
 export default function HeroSection() {
+  const { t, isRTL } = useI18n();
   const steps = [2, 5, 7, 10, 12, 15];
   const [yearsCount, setYearsCount] = useState(2);
 
@@ -13,17 +15,19 @@ export default function HeroSection() {
         setYearsCount(value);
       }, 1900 + index * 320)
     );
-
     return () => {
       timers.forEach((timer) => window.clearTimeout(timer));
     };
   }, []);
 
+  const fontFamily = isRTL
+    ? "var(--font-cairo), Cairo, sans-serif"
+    : "var(--font-poppins), Poppins, sans-serif";
+
   return (
     <section
       id="home"
-      className="relative w-full overflow-hidden"
-      style={{ height: "100vh", minHeight: "720px", maxHeight: "980px" }}
+      className="relative w-full overflow-hidden min-h-screen pb-12 lg:h-screen lg:min-h-[720px] lg:max-h-[980px] lg:pb-0"
     >
       <div className="absolute inset-0">
         <Image
@@ -39,13 +43,13 @@ export default function HeroSection() {
       </div>
 
       <div
-        className="relative z-10 mx-auto flex h-full w-full flex-col"
+        className="relative z-10 mx-auto flex min-h-screen w-full flex-col lg:h-full"
         style={{ maxWidth: "1440px", paddingInline: "clamp(24px, 5.42vw, 78px)" }}
       >
         <div className="relative flex flex-1 flex-col lg:block">
           {/* ── Text column ── */}
           <div
-            className="flex flex-col justify-start pt-0 text-center lg:justify-center lg:text-left"
+            className="flex flex-col justify-start pt-0 text-center lg:justify-center lg:text-start"
             style={{
               paddingTop: "clamp(84px, 12vh, 210px)",
               maxWidth: "min(100%, 660px)",
@@ -58,13 +62,10 @@ export default function HeroSection() {
                 fontSize: "clamp(22px, 8vw, 60px)",
                 lineHeight: "1.08",
                 letterSpacing: "0.01em",
-                fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                fontFamily,
               }}
             >
-              Avoid FTA penalties &
-              <br />
-              stay 100% compliant in
-              UAE corporate tax
+              {t("hero.heading")}
             </h1>
 
             <p
@@ -76,12 +77,12 @@ export default function HeroSection() {
                 lineHeight: "1.45",
                 letterSpacing: "0.02em",
                 color: "rgba(255, 255, 255, 0.70)",
-                fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                fontFamily,
               }}
             >
-              Trusted UAE tax advisors / FTA registered
+              {t("hero.subheading")}
               <br />
-              15+ years experience
+              {t("hero.subheading2")}
             </p>
 
             <div
@@ -90,10 +91,13 @@ export default function HeroSection() {
                 marginTop: "clamp(22px, 5vh, 86px)",
                 gap: "clamp(12px, 2.4vw, 40px)",
                 flexWrap: "wrap",
+                justifyContent: isRTL ? undefined : undefined,
               }}
             >
               <a
-                href="#cta"
+                href="https://wa.me/971504772299"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hero-step-2-left inline-flex items-center justify-center font-medium transition hover:brightness-110"
                 style={{
                   width: "clamp(188px, 15.5vw, 242px)",
@@ -104,10 +108,10 @@ export default function HeroSection() {
                   letterSpacing: "0.02em",
                   color: "#120f0a",
                   boxShadow: "0 10px 28px rgba(197, 160, 89, 0.18)",
-                  fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                  fontFamily,
                 }}
               >
-                Book free consultation
+                {t("hero.bookBtn")}
               </a>
 
               <a
@@ -120,10 +124,10 @@ export default function HeroSection() {
                   border: "1px solid rgba(197, 160, 89, 0.75)",
                   fontSize: "clamp(12px, 0.95vw, 14px)",
                   letterSpacing: "0.02em",
-                  fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                  fontFamily,
                 }}
               >
-                Our services
+                {t("hero.servicesBtn")}
               </a>
             </div>
           </div>
@@ -132,7 +136,7 @@ export default function HeroSection() {
           <div
             className="hero-step-1-right absolute hidden lg:block"
             style={{
-              right: "clamp(-24px, -1.6vw, 8px)",
+              [isRTL ? "left" : "right"]: "clamp(-24px, -1.6vw, 8px)",
               top: "clamp(42px, 7.8vh, 98px)",
               width: "clamp(320px, 31vw, 590px)",
               aspectRatio: "601 / 686",
@@ -150,7 +154,6 @@ export default function HeroSection() {
                 filter: "blur(30px)",
               }}
             />
-
             <div className="relative h-full w-full">
               <div className="absolute" style={{ inset: 0, zIndex: 1 }}>
                 <div className="relative h-full w-full">
@@ -167,13 +170,13 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* ── +15 Badge (positioned independently) ── */}
+          {/* ── +15 Badge ── */}
           <div
             className="hero-step-4-up absolute hidden lg:flex flex-col items-center"
             style={{
-              left: "calc(100% - clamp(320px, 31vw, 590px) / 2 + clamp(-24px, -1.6vw, 8px))",
+              [isRTL ? "right" : "left"]: "calc(100% - clamp(320px, 31vw, 590px) / 2 + clamp(-24px, -1.6vw, 8px))",
               bottom: "clamp(8px, 1.4vh, 24px)",
-              transform: "translateX(-50%)",
+              transform: isRTL ? "translateX(50%)" : "translateX(-50%)",
               zIndex: 3,
               width: "160px",
             }}
@@ -188,12 +191,11 @@ export default function HeroSection() {
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                fontFamily,
               }}
             >
               +{yearsCount}
             </div>
-
             <span
               style={{
                 marginTop: "12px",
@@ -202,10 +204,10 @@ export default function HeroSection() {
                 letterSpacing: "0.2px",
                 color: "#90A1B9",
                 textAlign: "center",
-                fontFamily: "var(--font-poppins), Poppins, sans-serif",
+                fontFamily,
               }}
             >
-              Years Of Excellence
+              {t("hero.yearsLabel")}
             </span>
           </div>
 

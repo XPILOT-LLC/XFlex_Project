@@ -1,76 +1,60 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-
 import TestimonialCard, { type TestimonialItem } from "../ui/TestimonialCard";
-
-// Using exact data provided in the prompt
-const testimonials: TestimonialItem[] = [
-  {
-    name: "Mohammed Al Nuaimi",
-    role: "Managing Director - SME (Dubai)",
-    text: "We received a penalty from the FTA and didn’t know how to proceed. XFLEX handled the case professionally and managed all communication with the authority. Their structured approach and expertise made a stressful situation much easier to handle.",
-    image: "/avatar/4.png",
-  },
-  {
-    name: "Fatima Al Suwaidi",
-    role: "Finance Manager - Retail Group (UAE)",
-    text: "We were struggling with related party transactions and documentation. XFLEX guided us step by step and prepared everything professionally. Their work gave us confidence during review. Highly recommended for companies dealing with complex structures.",
-    image: "/avatar/1.jpg",
-  },
-  {
-    name: "Ahmed Al Kaabi",
-    role: "Managing Director - SME (Dhabi)",
-    text: "Working with XFLEX was a turning point for our business. We had concerns regarding Corporate Tax compliance and potential penalties, and their team handled everything professionally from start to finish. They explained complex tax matters in a very clear way and represented us confidently before the FTA. I highly recommend XFLEX to any company that wants peace of mind when dealing with tax authorities.",
-    image: "/avatar/3.png",
-  },
-  {
-    name: "Sara Al Mansoori",
-    role: "Founder – Startup (UAE)",
-    text: "XFLEX provided exceptional support during a critical time for our company. We received an FTA inquiry and were unsure how to respond, but their team stepped in immediately and managed the entire process. Their knowledge, responsiveness, and structured approach made a huge difference. Thanks to them, we resolved the issue smoothly and avoided unnecessary complications.",
-    image: "/avatar/2.webp",
-  },
-];
+import { useI18n } from "@/lib/i18n";
 
 function mod(index: number, total: number) {
   return (index + total) % total;
 }
 
 export default function TestimonialsSection() {
+  const { t, tRaw, isRTL } = useI18n();
+  const fontFamily = isRTL
+    ? "var(--font-cairo), Cairo, sans-serif"
+    : "var(--font-poppins), Poppins, sans-serif";
+
+  const testimonials = (tRaw("testimonials.items") as TestimonialItem[]) ?? [];
+
+  // Keep avatar images (not in translation) mapped by index
+  const avatars = ["/avatar/4.png", "/avatar/1.jpg", "/avatar/3.png", "/avatar/2.webp"];
+  const testimonialsFull: TestimonialItem[] = testimonials.map((item, i) => ({
+    ...item,
+    image: avatars[i] ?? "/avatar/4.png",
+  }));
+
   const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-  // Auto slide every 5 seconds, looping infinitely
   useEffect(() => {
+    if (!testimonialsFull.length) return;
     const timer = window.setInterval(() => {
-      setActiveIndex((current) => mod(current + 1, testimonials.length));
+      setActiveIndex((current) => mod(current + 1, testimonialsFull.length));
     }, 5000);
-
     return () => window.clearInterval(timer);
-  }, []);
+  }, [testimonialsFull.length]);
 
   const visibleCards = useMemo(
-    () => ({
-      left: testimonials[mod(activeIndex - 1, testimonials.length)],
-      center: testimonials[activeIndex],
-      right: testimonials[mod(activeIndex + 1, testimonials.length)],
-    }),
-    [activeIndex]
+    () =>
+      testimonialsFull.length
+        ? {
+            left: testimonialsFull[mod(activeIndex - 1, testimonialsFull.length)],
+            center: testimonialsFull[activeIndex],
+            right: testimonialsFull[mod(activeIndex + 1, testimonialsFull.length)],
+          }
+        : null,
+    [activeIndex, testimonialsFull]
   );
+
+  if (!visibleCards) return null;
 
   return (
     <section className="relative overflow-hidden bg-[#04060A] py-24 md:py-32">
       {/* Background Effects */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-[170px] -top-[96px] h-[430px] w-[430px] rounded-full bg-[radial-gradient(circle_at_48%_48%,rgba(201,169,110,0.30)_0%,rgba(132,103,48,0.16)_34%,rgba(201,169,110,0)_70%)] blur-[36px] md:-left-[158px] md:-top-[84px]" />
-
-        <svg
-          className="absolute -left-[176px] -top-[176px] h-[440px] w-[440px] opacity-95 md:-left-[166px] md:-top-[166px] md:h-[485px] md:w-[485px]"
-          viewBox="0 0 485 485"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
+        <svg className="absolute -left-[176px] -top-[176px] h-[440px] w-[440px] opacity-95 md:-left-[166px] md:-top-[166px] md:h-[485px] md:w-[485px]" viewBox="0 0 485 485" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <mask id="testimonialCircleFade">
               <linearGradient id="testimonialCircleMask" x1="0" y1="84" x2="394" y2="274" gradientUnits="userSpaceOnUse">
@@ -90,65 +74,81 @@ export default function TestimonialsSection() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1300px] px-4 sm:px-6 lg:px-8">
-        {/* Header (centered) */}
+        {/* Header */}
         <div className="flex flex-col items-center text-center">
-          <p className="text-[11px] font-medium tracking-[0.45em] text-[#C9A96E] ml-[0.45em]">
-            TESTIMONIALS.....
+          <p className="text-[11px] font-medium tracking-[0.45em] text-[#C9A96E] ml-[0.45em]" style={{ fontFamily }}>
+            {t("testimonials.sectionLabel")}
           </p>
-          <h2 className="mt-5 text-[36px] font-bold leading-tight tracking-tight text-white md:text-[48px]">
-            What our clients say
+          <h2 className="mt-5 text-[36px] font-bold leading-tight tracking-tight text-white md:text-[48px]" style={{ fontFamily }}>
+            {t("testimonials.heading")}
           </h2>
-          <p className="mt-4 text-[15px] text-[#8B949E]">
-            Trusted by businesses across the UAE.
+          <p className="mt-4 text-[15px] text-[#8B949E]" style={{ fontFamily }}>
+            {t("testimonials.description")}
           </p>
         </div>
 
-        {/* Testimonials Layout - Horizontal Carousel */}
-        <div className="mt-20 flex w-full justify-center">
-          {/* Height increased slightly to accommodate taller centered card */}
-          <div className="relative h-[500px] w-full max-w-[1200px]">
+        {/* Carousel */}
+        <div 
+          className="mt-12 md:mt-20 flex w-full justify-center"
+          onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+          onTouchEnd={(e) => {
+            if (touchStartX === null) return;
+            const touchEndX = e.changedTouches[0].clientX;
+            const delta = touchStartX - touchEndX;
+            if (Math.abs(delta) < 40) { setTouchStartX(null); return; }
+            if (isRTL) {
+              if (delta > 0) setActiveIndex((current) => mod(current - 1, testimonialsFull.length));
+              else setActiveIndex((current) => mod(current + 1, testimonialsFull.length));
+            } else {
+              if (delta > 0) setActiveIndex((current) => mod(current + 1, testimonialsFull.length));
+              else setActiveIndex((current) => mod(current - 1, testimonialsFull.length));
+            }
+            setTouchStartX(null);
+          }}
+        >
+          <div className="relative h-auto w-full max-w-[1200px]">
+            {/* 
+              GHOST CARD: This is a invisible, relative version of the active card.
+              It exists purely to push the container's height on mobile, while the 
+              real cards animate absolutely on top of it.
+            */}
+            <motion.div layout className="pointer-events-none invisible relative mt-10 px-8 pb-12 pt-[100px] w-[90vw] max-w-[340px] md:max-w-[540px] lg:max-w-[760px] md:px-12 md:pb-16 mx-auto">
+              <div className="flex flex-col items-center text-center">
+                <p className="text-[14.5px] leading-[1.8] text-[#D1D5DB] md:text-[16px]">"{visibleCards.center.text}"</p>
+                <div className="mt-10">
+                  <h4 className="text-[17px] font-bold text-[#C9A96E] md:text-[18px]">{visibleCards.center.name}</h4>
+                  <p className="mt-1.5 text-[14px] text-[#8B949E] md:text-[15px]">{visibleCards.center.role}</p>
+                </div>
+              </div>
+            </motion.div>
+
             <AnimatePresence initial={false} mode="popLayout">
-              <TestimonialCard
-                key={`left-${activeIndex}-${visibleCards.left.name}`}
-                testimonial={visibleCards.left}
-                isActive={false}
-                position="left"
-              />
-              <TestimonialCard
-                key={`center-${activeIndex}-${visibleCards.center.name}`}
-                testimonial={visibleCards.center}
-                isActive={true}
-                position="center"
-              />
-              <TestimonialCard
-                key={`right-${activeIndex}-${visibleCards.right.name}`}
-                testimonial={visibleCards.right}
-                isActive={false}
-                position="right"
-              />
+              <TestimonialCard key={`left-${activeIndex}`} testimonial={visibleCards.left} isActive={false} position="left" />
+              <TestimonialCard key={`center-${activeIndex}`} testimonial={visibleCards.center} isActive={true} position="center" />
+              <TestimonialCard key={`right-${activeIndex}`} testimonial={visibleCards.right} isActive={false} position="right" />
             </AnimatePresence>
           </div>
         </div>
 
-        {/* Slider Controls - Spaced nicely below the massive center card */}
-        <div className="mt-4 flex justify-center gap-5">
+        {/* Controls */}
+        <div className="mt-6 md:mt-8 flex justify-center gap-5">
           <button
             type="button"
-            onClick={() => setActiveIndex((current) => mod(current - 1, testimonials.length))}
+            onClick={() => setActiveIndex((current) => mod(current - 1, testimonialsFull.length))}
             className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#181f29] text-[#C9A96E] transition-all duration-300 hover:bg-[#202936] hover:shadow-[0_0_20px_rgba(201,169,110,0.15)]"
-            aria-label="Previous testimonial"
+            aria-label={t("testimonials.prevBtn")}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={isRTL ? "-scale-x-100 transform" : ""}>
               <path d="m15 18-6-6 6-6" />
             </svg>
           </button>
           <button
             type="button"
-            onClick={() => setActiveIndex((current) => mod(current + 1, testimonials.length))}
+            onClick={() => setActiveIndex((current) => mod(current + 1, testimonialsFull.length))}
             className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#181f29] text-[#C9A96E] transition-all duration-300 hover:bg-[#202936] hover:shadow-[0_0_20px_rgba(201,169,110,0.15)]"
-            aria-label="Next testimonial"
+            aria-label={t("testimonials.nextBtn")}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={isRTL ? "-scale-x-100 transform" : ""}>
               <path d="m9 18 6-6-6-6" />
             </svg>
           </button>

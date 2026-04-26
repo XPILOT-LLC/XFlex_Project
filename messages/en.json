@@ -1,0 +1,281 @@
+{
+  "metadata": {
+    "title": "XFLEX — UAE Tax & Auditing Experts",
+    "description": "Professional tax and auditing solutions tailored for businesses in the UAE."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "cta": "Get consultation",
+    "langSwitch": "AR"
+  },
+  "hero": {
+    "heading": "Avoid FTA penalties & stay 100% compliant in UAE corporate tax",
+    "subheading": "Trusted UAE tax advisors / FTA registered",
+    "subheading2": "15+ years experience",
+    "bookBtn": "Book free consultation",
+    "servicesBtn": "Our services",
+    "yearsLabel": "Years Of Excellence"
+  },
+  "features": {
+    "sectionLabel": "Why Choose XFLEX",
+    "heading1": "We Don't Just Manage Taxes",
+    "heading2": "We Secure Your Business Future.",
+    "description": "Smart tax solutions that keep your business compliant, protected, and ready to grow.",
+    "bookBtn": "Book free consultation",
+    "dashboardTitle": "Tax Allocation Analysis",
+    "revenueGrowth": "Revenue Growth",
+    "yoyGrowth": "YoY Growth",
+    "complianceRate": "Compliance Rate",
+    "industryLeading": "Industry Leading",
+    "activeClients": "Active Clients",
+    "taxSaved": "Tax Saved",
+    "accuracy": "Accuracy",
+    "items": [
+      {
+        "title": "Instant Tax Intelligence",
+        "description": "AI-driven insights that identify savings opportunities automatically"
+      },
+      {
+        "title": "Proactive Risk Protection",
+        "description": "Real-time monitoring prevents costly penalties before they happen"
+      },
+      {
+        "title": "Strategic Growth Partner",
+        "description": "Tax planning aligned with your business expansion goals"
+      }
+    ]
+  },
+  "about": {
+    "sectionLabel": "Who We Are",
+    "heading": "Expertise that Builds Trust, Precision that Ensures Growth",
+    "description": "At XFLEX, we specialize in delivering smart taxation and auditing solutions, specially tailored to the evolving needs of businesses in the UAE market",
+    "vision": {
+      "title": "Our Vision",
+      "description": "To become the most trusted tax partner in the UAE, helping businesses grow with confidence."
+    },
+    "values": {
+      "title": "Our Values",
+      "description": "Integrity in every action, absolute data precision, and total compliance with tax and financial regulations."
+    }
+  },
+  "services": {
+    "sectionLabel": "Our Services......",
+    "heading": "Comprehensive solutions for your business",
+    "description": "From compliance to growth, we cover every step of your financial journey.",
+    "scrollLeft": "Scroll services left",
+    "scrollRight": "Scroll services right",
+    "cards": [
+      {
+        "title": "Taxation Services",
+        "front": "Expert guidance on complex tax regulations and strategic planning",
+        "back": [
+          "VAT registration and deregistration",
+          "VAT return preparation and filing",
+          "Corporate tax advisory and compliance",
+          "Tax residency certificate assistance",
+          "Tax planning and structuring",
+          "Representation before UAE Federal Tax Authority (FTA)"
+        ]
+      },
+      {
+        "title": "Auditing Services",
+        "front": "Comprehensive financial audits and assurance services",
+        "back": [
+          "External and statutory audits",
+          "Internal audits and risk assessments",
+          "Compliance audits",
+          "Forensic audits and fraud investigation",
+          "Financial statement review and certification",
+          "Audit readiness and pre-audit support"
+        ]
+      },
+      {
+        "title": "ESR & UBO Compliance",
+        "front": "Simplify your business operations with complete corporate support solutions.",
+        "back": [
+          "ESR assessment and notifications",
+          "ESR reporting and filing",
+          "Ultimate Beneficial Ownership (UBO) compliance setup",
+          "Ongoing regulatory advisory"
+        ]
+      },
+      {
+        "title": "Administrative and Business Consultancy",
+        "front": "Streamline operation and grow faster with strategic business advice.",
+        "back": [
+          "Business setup and licensing in UAE (Mainland, Free Zone, Offshore)",
+          "PRO services and document clearance",
+          "Trade license renewal and compliance follow-up",
+          "Corporate governance advisory",
+          "Company liquidation and closure assistance",
+          "Restructuring and operational efficiency consulting"
+        ]
+      },
+      {
+        "title": "Corporate Support Services",
+        "front": "Simplify your business operations with complete corporate support solutions.",
+        "back": [
+          "Drafting of contracts and MOAs",
+          "Preparation of board resolutions and legal documents",
+          "Translation and attestation services",
+          "Document control and compliance systems",
+          "Administrative outsourcing support"
+        ]
+      },
+      {
+        "title": "Accounting & Bookkeeping",
+        "front": "Stay in control with precise bookkeeping and real-time financial insights.",
+        "back": [
+          "Monthly, quarterly, and annual bookkeeping",
+          "Preparation of financial statements (IFRS-compliant)",
+          "Chart of accounts setup and customization",
+          "Payroll processing and WPS compliance",
+          "Accounts payable/receivable management",
+          "Bank reconciliation and cash flow analysis"
+        ]
+      }
+    ]
+  },
+  "pricing": {
+    "sectionLabel": "Tax Structure......",
+    "heading": "Choose the Right Tax Structure for Your Business",
+    "whatsIncluded": "What's included",
+    "subscribe": "Subscribe",
+    "plans": [
+      {
+        "title": "Essential Compliance",
+        "price": "From AED 3,500",
+        "items": [
+          "Corporate Tax Registration",
+          "Initial Tax Position Review",
+          "Basic Compliance Guidance",
+          "VAT Registration (if applicable)"
+        ]
+      },
+      {
+        "title": "Growth & Monitoring",
+        "price": "From AED 7,500",
+        "items": [
+          "Corporate Tax Return Preparation & Filing",
+          "VAT Return Filing",
+          "Review of Key Transactions",
+          "Compliance Monitoring",
+          "Filing Deadline Tracking"
+        ]
+      },
+      {
+        "title": "Tax Protection & Advisory",
+        "price": "Custom Pricing",
+        "items": [
+          "Full Tax Risk Review",
+          "Financial Statements Tax Assessment",
+          "Ongoing Advisory Support",
+          "FTA Communication Support (limited)",
+          "Quarterly Strategy Meetings"
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "sectionLabel": "TESTIMONIALS.....",
+    "heading": "What our clients say",
+    "description": "Trusted by businesses across the UAE.",
+    "prevBtn": "Previous testimonial",
+    "nextBtn": "Next testimonial",
+    "items": [
+      {
+        "name": "Mohammed Al Nuaimi",
+        "role": "Managing Director - SME (Dubai)",
+        "text": "We received a penalty from the FTA and didn't know how to proceed. XFLEX handled the case professionally and managed all communication with the authority. Their structured approach and expertise made a stressful situation much easier to handle."
+      },
+      {
+        "name": "Fatima Al Suwaidi",
+        "role": "Finance Manager - Retail Group (UAE)",
+        "text": "We were struggling with related party transactions and documentation. XFLEX guided us step by step and prepared everything professionally. Their work gave us confidence during review. Highly recommended for companies dealing with complex structures."
+      },
+      {
+        "name": "Ahmed Al Kaabi",
+        "role": "Managing Director - SME (Dhabi)",
+        "text": "Working with XFLEX was a turning point for our business. We had concerns regarding Corporate Tax compliance and potential penalties, and their team handled everything professionally from start to finish. They explained complex tax matters in a very clear way and represented us confidently before the FTA. I highly recommend XFLEX to any company that wants peace of mind when dealing with tax authorities."
+      },
+      {
+        "name": "Sara Al Mansoori",
+        "role": "Founder – Startup (UAE)",
+        "text": "XFLEX provided exceptional support during a critical time for our company. We received an FTA inquiry and were unsure how to respond, but their team stepped in immediately and managed the entire process. Their knowledge, responsiveness, and structured approach made a huge difference. Thanks to them, we resolved the issue smoothly and avoided unnecessary complications."
+      }
+    ]
+  },
+  "team": {
+    "sectionLabel": "Meet Our Team",
+    "description": "Best Corporate Tax Consultant in UAE with 20+ years of experience as international tax consultants.",
+    "bookBtn": "Book free consultation",
+    "prevBtn": "Previous team member",
+    "nextBtn": "Next team member",
+    "linkedinLabel": "'s LinkedIn profile",
+    "members": [
+      {
+        "name": "Dr. Ebrahim Al Ali",
+        "role": "FOUNDER",
+        "bullets": [
+          "UAE Tax Consultant",
+          "Registered Tax Agent - UAE FTA",
+          "15+ Years Experience",
+          "Specialist in Corporate Tax & VAT"
+        ]
+      },
+      {
+        "name": "Falak Yussouf",
+        "role": "International Financial Expert",
+        "bullets": [
+          "International & UAE Tax Expert",
+          "FCA (UK)",
+          "30+ Years Experience",
+          "Cross-border Tax Specialist"
+        ]
+      },
+      {
+        "name": "Kader Khan",
+        "role": "Tax Expert",
+        "bullets": [
+          "Senior Tax Consultant",
+          "Chartered Accountant",
+          "20+ Years Experience",
+          "VAT & Corporate Tax Expert"
+        ]
+      }
+    ]
+  },
+  "cta": {
+    "formHeading": "Get in Touch",
+    "formSubheading": "Let's discuss how we can help your business thrive",
+    "namePlaceholder": "Full Name",
+    "emailPlaceholder": "Email Address",
+    "phonePlaceholder": "Phone Number",
+    "messagePlaceholder": "How can we help you?",
+    "sendBtn": "Send Message",
+    "bannerHeading": "Facing UAE Tax Risks? We Handle It For You.",
+    "bannerDescription": "Work with certified tax professionals to stay compliant, avoid penalties, and protect your business.",
+    "bookBtn": "Book free consultation"
+  },
+  "footer": {
+    "tagline": "Professional Tax Firm in Dubai, UAE",
+    "emailLabel": "EMAIL",
+    "phoneLabel": "PHONE",
+    "locationLabel": "LOCATION",
+    "locationValue": "Al Khabeesi Building - Office:(1-01) 4th St - Al Khabaisi - Deira - Dubai UAE",
+    "quickLinks": "Quick links",
+    "news": "News",
+    "faq": "FAQ",
+    "copyright": "© 2020 XFLEX. All rights reserved.",
+    "termOfUse": "Term of Use",
+    "privacyPolicy": "Privacy Policy",
+    "cookiePolicy": "Cookie Policy",
+    "followFacebook": "Follow us on Facebook",
+    "followInstagram": "Follow us on Instagram",
+    "followLinkedIn": "Follow us on LinkedIn"
+  }
+}
