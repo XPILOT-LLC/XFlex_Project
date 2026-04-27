@@ -14,7 +14,7 @@ interface FAQItem {
 
 export default function FAQPage() {
   const { t, tRaw, isRTL } = useI18n();
-  const [activeIndex, setActiveIndex] = useState<number | null>(2); // Default to 3rd item open as in reference
+  const [activeIndex, setActiveIndex] = useState<number | null>(null); // Start with all items closed
 
   const faqItems = (tRaw("faq.items") || []) as FAQItem[];
   

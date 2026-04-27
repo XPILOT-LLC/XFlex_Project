@@ -59,17 +59,17 @@ function ContactRow({ type, label, value }: { type: ContactIconType; label: stri
 
 const socialLinks = [
   {
-    key: "followFacebook",
-    href: "https://facebook.com",
+    key: "followX",
+    href: "https://x.com/xflex11111?s=11&t=T3nuyUnvicusWVWib4Qfbw",
     icon: (
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.294 19.497h2.039L6.486 3.24H4.298l13.31 17.41z" />
       </svg>
     ),
   },
   {
     key: "followInstagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/xflex11111?igsh=Zmhxc2pwa2lhMWQ5&utm_source=qr",
     icon: (
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
