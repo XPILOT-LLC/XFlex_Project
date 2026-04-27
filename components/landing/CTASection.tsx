@@ -102,9 +102,7 @@ export default function CTASection() {
 
           <motion.a
             variants={buttonEnter}
-            href="https://wa.me/971504772299"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#cta"
             className="mt-10 inline-flex h-[54px] min-w-[204px] items-center justify-center rounded-[8px] bg-[#D8B057] px-10 text-[12px] font-medium text-[#17120a] shadow-[0_18px_38px_rgba(216,176,87,0.22)] transition hover:-translate-y-1 hover:brightness-110"
             style={{ fontFamily, letterSpacing: "0.015em" }}
           >
