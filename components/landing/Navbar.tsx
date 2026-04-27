@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 const navKeys = [
   { key: "home", href: "#home" },
@@ -15,6 +16,9 @@ const navKeys = [
 
 export default function Navbar() {
   const { t, locale, setLocale, isRTL } = useI18n();
+  const pathname = usePathname();
+  const isLandingPage = pathname === "/landing" || pathname === "/";
+  
   const [isOpen, setIsOpen] = useState(false);
   const [activeHref, setActiveHref] = useState<string>(navKeys[0].href);
 
@@ -79,7 +83,7 @@ export default function Navbar() {
         }}
       >
         <a
-          href="#home"
+          href={isLandingPage ? "#home" : "/landing#home"}
           onClick={() => setActiveHref("#home")}
           className="relative flex shrink-0 items-center"
           style={{ width: "112px", height: "54px" }}
@@ -100,26 +104,29 @@ export default function Navbar() {
             gap: "clamp(22px, 2vw, 42px)",
           }}
         >
-          {navKeys.map((link) => (
-            <a
-              key={link.key}
-              href={link.href}
-              onClick={() => setActiveHref(link.href)}
-              className={`group relative px-1 pb-1 font-medium transition duration-300 ${
-                activeHref === link.href
-                  ? "text-white drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
-                  : "text-white/80 hover:text-white hover:drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
-              }`}
-              style={{ fontSize: "11px", lineHeight: "14px", letterSpacing: "0.14em" }}
-            >
-              {t(`nav.${link.key}`)}
-              <span
-                className={`absolute -bottom-1 left-1/2 h-px -translate-x-1/2 rounded-full bg-[#D6A84E] shadow-[0_0_12px_rgba(214,168,78,0.9)] transition-all duration-300 ${
-                  activeHref === link.href ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+          {navKeys.map((link) => {
+            const href = isLandingPage ? link.href : `/landing${link.href}`;
+            return (
+              <a
+                key={link.key}
+                href={href}
+                onClick={() => setActiveHref(link.href)}
+                className={`group relative px-1 pb-1 font-medium transition duration-300 ${
+                  activeHref === link.href && isLandingPage
+                    ? "text-white drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
+                    : "text-white/80 hover:text-white hover:drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
                 }`}
-              />
-            </a>
-          ))}
+                style={{ fontSize: "11px", lineHeight: "14px", letterSpacing: "0.14em" }}
+              >
+                {t(`nav.${link.key}`)}
+                <span
+                  className={`absolute -bottom-1 left-1/2 h-px -translate-x-1/2 rounded-full bg-[#D6A84E] shadow-[0_0_12px_rgba(214,168,78,0.9)] transition-all duration-300 ${
+                    activeHref === link.href && isLandingPage ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+                  }`}
+                />
+              </a>
+            );
+          })}
         </nav>
 
         <div className="col-start-3 justify-self-end hidden items-center gap-3 lg:flex">
@@ -172,34 +179,37 @@ export default function Navbar() {
             className="mx-auto mt-3 w-full max-w-[1380px] rounded-[24px] border border-white/15 bg-[linear-gradient(180deg,rgba(19,24,35,0.96)_0%,rgba(14,18,28,0.98)_100%)] p-5 shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl lg:hidden"
           >
           <nav className="flex flex-col gap-3">
-            {navKeys.map((link) => (
-              <a
-                key={link.key}
-                href={link.href}
-                onClick={() => {
-                  setActiveHref(link.href);
-                  setIsOpen(false);
-                }}
-                className={`group relative rounded-xl px-4 py-3 transition duration-300 ${
-                  activeHref === link.href
-                    ? "bg-white/6 text-white shadow-[0_0_18px_rgba(214,168,78,0.16)]"
-                    : "text-white/85 hover:bg-white/5 hover:text-white hover:shadow-[0_0_18px_rgba(214,168,78,0.14)]"
-                }`}
-                style={{
-                  fontFamily: isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif",
-                  fontSize: "13px",
-                  lineHeight: "1.4",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                {t(`nav.${link.key}`)}
-                <span
-                  className={`absolute bottom-2 start-4 h-px rounded-full bg-[#D6A84E] shadow-[0_0_12px_rgba(214,168,78,0.9)] transition-all duration-300 ${
-                    activeHref === link.href ? "w-10 opacity-100" : "w-0 opacity-0 group-hover:w-10 group-hover:opacity-100"
+            {navKeys.map((link) => {
+              const href = isLandingPage ? link.href : `/landing${link.href}`;
+              return (
+                <a
+                  key={link.key}
+                  href={href}
+                  onClick={() => {
+                    setActiveHref(link.href);
+                    setIsOpen(false);
+                  }}
+                  className={`group relative rounded-xl px-4 py-3 transition duration-300 ${
+                    activeHref === link.href && isLandingPage
+                      ? "bg-white/6 text-white shadow-[0_0_18px_rgba(214,168,78,0.16)]"
+                      : "text-white/85 hover:bg-white/5 hover:text-white hover:shadow-[0_0_18px_rgba(214,168,78,0.14)]"
                   }`}
-                />
-              </a>
-            ))}
+                  style={{
+                    fontFamily: isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif",
+                    fontSize: "13px",
+                    lineHeight: "1.4",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  {t(`nav.${link.key}`)}
+                  <span
+                    className={`absolute bottom-2 start-4 h-px rounded-full bg-[#D6A84E] shadow-[0_0_12px_rgba(214,168,78,0.9)] transition-all duration-300 ${
+                      activeHref === link.href && isLandingPage ? "w-10 opacity-100" : "w-0 opacity-0 group-hover:w-10 group-hover:opacity-100"
+                    }`}
+                  />
+                </a>
+              );
+            })}
           </nav>
 
           <div className="mt-4 flex gap-3">

@@ -152,7 +152,7 @@ export default function FooterSection() {
           </h3>
           <ul className="mt-4 space-y-2.5">
             <li>
-              <a href="#" className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white" style={{ fontFamily, fontSize: "10px", lineHeight: "1.4" }}>
+              <a href="/faq" className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white" style={{ fontFamily, fontSize: "10px", lineHeight: "1.4" }}>
                 {t("footer.faq")}
               </a>
             </li>

@@ -277,5 +277,47 @@
     "followFacebook": "Follow us on Facebook",
     "followInstagram": "Follow us on Instagram",
     "followLinkedIn": "Follow us on LinkedIn"
+  },
+  "faq": {
+    "sectionLabel": "FAQs",
+    "heading": "People also ask......",
+    "items": [
+      {
+        "question": "What services does XFLEX offer?",
+        "answer": "XFLEX offers a comprehensive range of professional services including Taxation Services (VAT & Corporate Tax), Auditing and Assurance, ESR & UBO Compliance, Administrative and Business Consultancy, and Accounting & Bookkeeping."
+      },
+      {
+        "question": "Do you help with VAT registration and filing in the UAE?",
+        "answer": "Yes, we provide end-to-end VAT services, including registration, deregistration, return preparation, and filing. We also represent clients before the Federal Tax Authority (FTA) to ensure smooth compliance."
+      },
+      {
+        "question": "Can you manage my company's bookkeeping and payroll?",
+        "answer": "Absolutely. We offer monthly bookkeeping, payroll processing, WPS compliance, financial reporting, and reconciliation to ensure your records are accurate and audit-ready."
+      },
+      {
+        "question": "Are your auditing services approved for official and regulatory use?",
+        "answer": "Yes, our auditing services are conducted in accordance with international standards and are suitable for statutory requirements, free zone compliance, and licensing renewals in the UAE."
+      },
+      {
+        "question": "What’s the difference between your pricing plans?",
+        "answer": "Our plans are designed for different business stages: 'Essential Compliance' covers basic tax setup; 'Growth & Monitoring' handles ongoing monthly filings; and 'Tax Protection & Advisory' provides full-scale risk management and advisory support."
+      },
+      {
+        "question": "Do you help with company setup in the UAE?",
+        "answer": "Yes, we specialize in business setup and licensing across UAE Mainland, Free Zones, and Offshore jurisdictions, providing all necessary consultancy and PRO services."
+      },
+      {
+        "question": "What is ESR and UBO compliance, and do I need it?",
+        "answer": "ESR (Economic Substance Regulations) and UBO (Ultimate Beneficial Ownership) are mandatory regulatory frameworks in the UAE. Most businesses need to assess their status and file notifications or reports; we provide full support for these filings."
+      },
+      {
+        "question": "Do you offer one-time services or only monthly subscriptions?",
+        "answer": "We offer both. You can engage us for one-time projects like VAT registration or corporate tax setup, or opt for our monthly retainer plans for continuous accounting and tax support."
+      },
+      {
+        "question": "How do I get started with your services?",
+        "answer": "The easiest way is to book a free consultation through our website. Our experts will assess your business needs and provide a tailored proposal to get you started immediately."
+      }
+    ]
   }
 }
