@@ -76,7 +76,7 @@ export default function Navbar() {
       <header
         className="relative mx-auto grid w-full max-w-[1380px] grid-cols-[auto_1fr_auto] items-center rounded-full border border-white/25 shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-[12px]"
         style={{
-          height: "clamp(60px, 5vw, 76px)",
+          height: "clamp(70px, 6vw, 86px)",
           paddingInline: "clamp(18px, 2.7vw, 34px)",
           background:
             "linear-gradient(90deg, rgba(41,55,84,0.90) 0%, rgba(40,40,49,0.70) 54%, rgba(71,52,37,0.56) 100%)",
@@ -85,16 +85,34 @@ export default function Navbar() {
         <a
           href={isLandingPage ? "#home" : "/landing#home"}
           onClick={() => setActiveHref("#home")}
-          className="relative flex shrink-0 items-center"
-          style={{ width: "112px", height: "54px" }}
+          className="flex shrink-0 items-center flex-row"
+          dir="ltr"
+          style={{ width: "fit-content", height: "54px" }}
         >
-          <Image
-            src="/logo.png"
-            alt="XFLEX"
-            fill
-            priority
-            className={`object-contain ${isRTL ? "object-right" : "object-left"}`}
-          />
+          <div className="relative h-[54px] w-[54px] flex-shrink-0">
+            <Image
+              src="/logo.png"
+              alt="Xflex"
+              fill
+              priority
+              className="object-contain object-left"
+            />
+          </div>
+
+          <span
+            className="ms-3 font-bold tracking-widest"
+            style={{
+              background: "linear-gradient(135deg, #FEE685 0%, #D6A84E 50%, #B8860B 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontSize: "40px",
+              fontWeight: "900",
+              fontFamily: "var(--font-cinzel), serif",
+              filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
+            }}
+          >
+            XFLEX
+          </span>
         </a>
 
         <nav
@@ -116,7 +134,7 @@ export default function Navbar() {
                     ? "text-white drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
                     : "text-white/80 hover:text-white hover:drop-shadow-[0_0_10px_rgba(214,168,78,0.55)]"
                 }`}
-                style={{ fontSize: "11px", lineHeight: "14px", letterSpacing: "0.14em" }}
+                style={{ fontSize: "13px", lineHeight: "16px", letterSpacing: "0.12em", textTransform: "uppercase" }}
               >
                 {t(`nav.${link.key}`)}
                 <span
@@ -199,6 +217,7 @@ export default function Navbar() {
                     fontSize: "13px",
                     lineHeight: "1.4",
                     letterSpacing: "0.08em",
+                    textTransform: "uppercase",
                   }}
                 >
                   {t(`nav.${link.key}`)}

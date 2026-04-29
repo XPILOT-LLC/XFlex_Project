@@ -39,17 +39,17 @@ function ContactIcon({ type }: { type: ContactIconType }) {
 
 function ContactRow({ type, label, value }: { type: ContactIconType; label: string; value: string }) {
   const { isRTL } = useI18n();
-  const fontFamily = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
+  const siteFont = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
   return (
     <div className="flex items-start gap-3">
       <div className="mt-0.5 flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[8px] bg-[linear-gradient(180deg,#3F3218_0%,#2E2412_100%)]">
         <ContactIcon type={type} />
       </div>
       <div>
-        <div className="uppercase text-[#6E7682]" style={{ fontFamily, fontSize: "7px", lineHeight: "1.2", letterSpacing: "0.18em" }}>
+        <div className="uppercase text-[#6E7682]" style={{ fontFamily: siteFont, fontSize: "7px", lineHeight: "1.2", letterSpacing: "0.18em" }}>
           {label}
         </div>
-        <div className="mt-1 text-[#D2D7DF]" style={{ fontFamily, fontSize: "11px", lineHeight: "1.5" }}>
+        <div className="mt-1 text-[#D2D7DF]" style={{ fontFamily: siteFont, fontSize: "11px", lineHeight: "1.5" }}>
           {value}
         </div>
       </div>
@@ -91,20 +91,40 @@ const socialLinks = [
 
 export default function FooterSection() {
   const { t, isRTL } = useI18n();
-  const fontFamily = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
+  const logoFont = "var(--font-cinzel), serif";
+  const siteFont = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
 
   return (
     <footer className="border-t border-white/6 bg-[#0B0F15] px-6 py-10 md:px-12">
       <div className="mx-auto grid max-w-[1100px] gap-10 md:grid-cols-[1.8fr_0.7fr_0.6fr]">
+
         {/* Column 1 — Brand + Contact */}
         <div>
-          <div className="relative h-[54px] w-[72px]">
-            <Image src="/logo.png" alt="XFLEX" fill className="object-contain object-left" />
-          </div>
+          <div className="flex items-start gap-4">
+            <div className="relative h-[72px] w-[96px]">
+              <Image src="/logo.png" alt="Xflex" fill className={`object-contain ${isRTL ? "object-right" : "object-left"}`} priority />
+            </div>
 
-          <p className="mt-2 text-white" style={{ fontFamily, fontSize: "12px", lineHeight: "1.35", fontWeight: 600 }}>
-            {t("footer.tagline")}
-          </p>
+            <div>
+              <div 
+                className="text-2xl font-bold tracking-widest uppercase" 
+                style={{ 
+                  background: "linear-gradient(135deg, #FEE685 0%, #D6A84E 50%, #B8860B 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  fontFamily: logoFont, 
+                  lineHeight: 1,
+                  filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
+                }}
+              >
+                XFLEX
+              </div>
+
+              <p className="mt-2 text-white" style={{ fontFamily: siteFont, fontSize: "12px", lineHeight: "1.35", fontWeight: 600 }}>
+                {t("footer.tagline")}
+              </p>
+            </div>
+          </div>
 
           <div className="mt-5 space-y-4">
             <ContactRow type="email" label={t("footer.emailLabel")} value="x@xflex.ae" />
@@ -131,13 +151,13 @@ export default function FooterSection() {
 
         {/* Column 2 — Quick Links */}
         <div>
-          <h3 className="text-[#D1A54B]" style={{ fontFamily, fontSize: "10px", lineHeight: "1.2", fontWeight: 500 }}>
+          <h3 className="text-[#D1A54B]" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.2", fontWeight: 500 }}>
             {t("footer.quickLinks")}
           </h3>
           <ul className="mt-4 space-y-2.5">
             {navLinks.map((link) => (
               <li key={link.key}>
-                <a href={link.href} className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white" style={{ fontFamily, fontSize: "10px", lineHeight: "1.4" }}>
+                <a href={link.href} className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white uppercase" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.4", letterSpacing: "0.05em" }}>
                   {t(`nav.${link.key}`)}
                 </a>
               </li>
@@ -147,12 +167,12 @@ export default function FooterSection() {
 
         {/* Column 3 — News/FAQ */}
         <div>
-          <h3 className="text-[#D1A54B]" style={{ fontFamily, fontSize: "10px", lineHeight: "1.2", fontWeight: 500 }}>
+          <h3 className="text-[#D1A54B]" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.2", fontWeight: 500 }}>
             {t("footer.news")}
           </h3>
           <ul className="mt-4 space-y-2.5">
             <li>
-              <a href="/faq" className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white" style={{ fontFamily, fontSize: "10px", lineHeight: "1.4" }}>
+              <a href="/faq" className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white uppercase" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.4", letterSpacing: "0.05em" }}>
                 {t("footer.faq")}
               </a>
             </li>
@@ -162,7 +182,7 @@ export default function FooterSection() {
 
       {/* Bottom bar */}
       <div className="mx-auto mt-8 flex max-w-[1100px] flex-col gap-3 border-t border-white/6 pt-5 text-[#B1B7C1] md:flex-row md:items-center md:justify-between">
-        <p style={{ fontFamily, fontSize: "8px", lineHeight: "1.4" }}>
+        <p style={{ fontFamily: siteFont, fontSize: "8px", lineHeight: "1.4" }}>
           {t("footer.copyright")}
         </p>
         <div className="flex flex-wrap gap-4 md:gap-6">
@@ -171,7 +191,7 @@ export default function FooterSection() {
               key={item}
               href="#"
               className="block py-2 md:inline md:py-0 underline underline-offset-2 transition hover:text-white"
-              style={{ fontFamily, fontSize: "8px", lineHeight: "1.4" }}
+              style={{ fontFamily: siteFont, fontSize: "8px", lineHeight: "1.4" }}
             >
               {t(`footer.${item}`)}
             </a>
