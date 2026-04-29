@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { key: "home", href: "#home" },
@@ -91,6 +92,8 @@ const socialLinks = [
 
 export default function FooterSection() {
   const { t, isRTL } = useI18n();
+  const pathname = usePathname();
+  const isLandingPage = pathname === "/landing" || pathname === "/";
   const logoFont = "var(--font-cinzel), serif";
   const siteFont = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
 
@@ -100,30 +103,42 @@ export default function FooterSection() {
 
         {/* Column 1 — Brand + Contact */}
         <div>
-          <div className="flex items-start gap-4">
-            <div className="relative h-[72px] w-[96px]">
-              <Image src="/logo.png" alt="Xflex" fill className={`object-contain ${isRTL ? "object-right" : "object-left"}`} priority />
-            </div>
+          <div className="flex flex-col items-start">
+            <a
+              href={isLandingPage ? "#home" : "/landing#home"}
+              className="flex shrink-0 items-center flex-row"
+              dir="ltr"
+              style={{ width: "fit-content", height: "54px" }}
+            >
+              <div className="relative h-[54px] w-[54px] flex-shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="Xflex"
+                  fill
+                  priority
+                  className="object-contain object-left"
+                />
+              </div>
 
-            <div>
-              <div 
-                className="text-2xl font-bold tracking-widest uppercase" 
-                style={{ 
+              <span
+                className="ms-3 font-bold tracking-widest"
+                style={{
                   background: "linear-gradient(135deg, #FEE685 0%, #D6A84E 50%, #B8860B 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  fontFamily: logoFont, 
-                  lineHeight: 1,
+                  fontSize: "40px",
+                  fontWeight: "900",
+                  fontFamily: "var(--font-cinzel), serif",
                   filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
                 }}
               >
                 XFLEX
-              </div>
+              </span>
+            </a>
 
-              <p className="mt-2 text-white" style={{ fontFamily: siteFont, fontSize: "12px", lineHeight: "1.35", fontWeight: 600 }}>
-                {t("footer.tagline")}
-              </p>
-            </div>
+            <p className="mt-2 text-white" style={{ fontFamily: siteFont, fontSize: "12px", lineHeight: "1.35", fontWeight: 600 }}>
+              {t("footer.tagline")}
+            </p>
           </div>
 
           <div className="mt-5 space-y-4">
