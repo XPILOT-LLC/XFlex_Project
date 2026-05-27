@@ -17,7 +17,8 @@ const navKeys = [
 export default function Navbar() {
   const { t, locale, setLocale, isRTL } = useI18n();
   const pathname = usePathname();
-  const isLandingPage = pathname === "/landing" || pathname === "/";
+  const localePrefix = pathname.startsWith("/ar") ? "/ar" : "/en";
+  const isLandingPage = pathname === "/" || pathname === "/landing" || pathname === "/en" || pathname === "/ar";
   
   const [isOpen, setIsOpen] = useState(false);
   const [activeHref, setActiveHref] = useState<string>(navKeys[0].href);
@@ -83,7 +84,7 @@ export default function Navbar() {
         }}
       >
         <a
-          href={isLandingPage ? "#home" : "/landing#home"}
+          href={isLandingPage ? "#home" : `${localePrefix}#home`}
           onClick={() => setActiveHref("#home")}
           className="flex shrink-0 items-center flex-row"
           dir="ltr"
@@ -123,11 +124,11 @@ export default function Navbar() {
           }}
         >
           {navKeys.map((link) => {
-            const href = isLandingPage ? link.href : `/landing${link.href}`;
+            const localizedHref = isLandingPage ? link.href : `${localePrefix}${link.href}`;
             return (
               <a
                 key={link.key}
-                href={href}
+                href={localizedHref}
                 onClick={() => setActiveHref(link.href)}
                 className={`group relative px-1 pb-1 font-medium transition duration-300 ${
                   activeHref === link.href && isLandingPage
@@ -198,11 +199,10 @@ export default function Navbar() {
           >
           <nav className="flex flex-col gap-3">
             {navKeys.map((link) => {
-              const href = isLandingPage ? link.href : `/landing${link.href}`;
               return (
                 <a
                   key={link.key}
-                  href={href}
+                  href={isLandingPage ? link.href : `${localePrefix}${link.href}`}
                   onClick={() => {
                     setActiveHref(link.href);
                     setIsOpen(false);

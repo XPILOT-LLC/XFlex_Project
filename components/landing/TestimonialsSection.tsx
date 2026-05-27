@@ -2,49 +2,54 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-import TestimonialCard, { type TestimonialItem } from "../ui/TestimonialCard";
+import TestimonialCard from "../ui/TestimonialCard";
 import { useI18n } from "@/lib/i18n";
+import type { TestimonialItem } from "@/lib/api/types";
 
 function mod(index: number, total: number) {
   return (index + total) % total;
 }
 
-export default function TestimonialsSection() {
-  const { t, tRaw, isRTL } = useI18n();
+type TestimonialsSectionProps = {
+  testimonials: TestimonialItem[];
+};
+
+export default function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
+  const { t, isRTL } = useI18n();
   const fontFamily = isRTL
     ? "var(--font-cairo), Cairo, sans-serif"
     : "var(--font-poppins), Poppins, sans-serif";
-
-  const testimonials = (tRaw("testimonials.items") as TestimonialItem[]) ?? [];
-
-  // Keep avatar images (not in translation) mapped by index
-  const avatars = ["/avatar/4.png", "/avatar/1.jpg", "/avatar/3.png", "/avatar/2.webp"];
-  const testimonialsFull: TestimonialItem[] = testimonials.map((item, i) => ({
-    ...item,
-    image: avatars[i] ?? "/avatar/4.png",
-  }));
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!testimonialsFull.length) return;
+    if (!testimonials.length) return;
     const timer = window.setInterval(() => {
-      setActiveIndex((current) => mod(current + 1, testimonialsFull.length));
+      setActiveIndex((current) => mod(current + 1, testimonials.length));
     }, 5000);
     return () => window.clearInterval(timer);
-  }, [testimonialsFull.length]);
+  }, [testimonials.length]);
+
+  useEffect(() => {
+    if (!testimonials.length) {
+      setActiveIndex(0);
+      return;
+    }
+
+    setActiveIndex((current) => mod(current, testimonials.length));
+  }, [testimonials]);
 
   const visibleCards = useMemo(
     () =>
-      testimonialsFull.length
+      testimonials.length
         ? {
-            left: testimonialsFull[mod(activeIndex - 1, testimonialsFull.length)],
-            center: testimonialsFull[activeIndex],
-            right: testimonialsFull[mod(activeIndex + 1, testimonialsFull.length)],
+            left: testimonials[mod(activeIndex - 1, testimonials.length)],
+            center: testimonials[activeIndex],
+            right: testimonials[mod(activeIndex + 1, testimonials.length)],
           }
         : null,
-    [activeIndex, testimonialsFull]
+    [activeIndex, testimonials]
   );
 
   if (!visibleCards) return null;
@@ -97,11 +102,11 @@ export default function TestimonialsSection() {
             const delta = touchStartX - touchEndX;
             if (Math.abs(delta) < 40) { setTouchStartX(null); return; }
             if (isRTL) {
-              if (delta > 0) setActiveIndex((current) => mod(current - 1, testimonialsFull.length));
-              else setActiveIndex((current) => mod(current + 1, testimonialsFull.length));
+              if (delta > 0) setActiveIndex((current) => mod(current - 1, testimonials.length));
+              else setActiveIndex((current) => mod(current + 1, testimonials.length));
             } else {
-              if (delta > 0) setActiveIndex((current) => mod(current + 1, testimonialsFull.length));
-              else setActiveIndex((current) => mod(current - 1, testimonialsFull.length));
+              if (delta > 0) setActiveIndex((current) => mod(current + 1, testimonials.length));
+              else setActiveIndex((current) => mod(current - 1, testimonials.length));
             }
             setTouchStartX(null);
           }}
@@ -134,7 +139,7 @@ export default function TestimonialsSection() {
         <div className="mt-6 md:mt-8 flex justify-center gap-5">
           <button
             type="button"
-            onClick={() => setActiveIndex((current) => mod(current - 1, testimonialsFull.length))}
+            onClick={() => setActiveIndex((current) => mod(current - 1, testimonials.length))}
             className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#181f29] text-[#C9A96E] transition-all duration-300 hover:bg-[#202936] hover:shadow-[0_0_20px_rgba(201,169,110,0.15)]"
             aria-label={t("testimonials.prevBtn")}
           >
@@ -144,7 +149,7 @@ export default function TestimonialsSection() {
           </button>
           <button
             type="button"
-            onClick={() => setActiveIndex((current) => mod(current + 1, testimonialsFull.length))}
+            onClick={() => setActiveIndex((current) => mod(current + 1, testimonials.length))}
             className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[#181f29] text-[#C9A96E] transition-all duration-300 hover:bg-[#202936] hover:shadow-[0_0_20px_rgba(201,169,110,0.15)]"
             aria-label={t("testimonials.nextBtn")}
           >

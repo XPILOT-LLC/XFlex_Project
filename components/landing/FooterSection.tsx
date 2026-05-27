@@ -93,8 +93,8 @@ const socialLinks = [
 export default function FooterSection() {
   const { t, isRTL } = useI18n();
   const pathname = usePathname();
-  const isLandingPage = pathname === "/landing" || pathname === "/";
-  const logoFont = "var(--font-cinzel), serif";
+  const localePrefix = pathname.startsWith("/ar") ? "/ar" : "/en";
+  const isLandingPage = pathname === "/" || pathname === "/landing" || pathname === "/en" || pathname === "/ar";
   const siteFont = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
 
   return (
@@ -105,7 +105,7 @@ export default function FooterSection() {
         <div>
           <div className="flex flex-col items-start">
             <a
-              href={isLandingPage ? "#home" : "/landing#home"}
+              href={isLandingPage ? "#home" : `${localePrefix}#home`}
               className="flex shrink-0 items-center flex-row"
               dir="ltr"
               style={{ width: "fit-content", height: "54px" }}
@@ -172,7 +172,7 @@ export default function FooterSection() {
           <ul className="mt-4 space-y-2.5">
             {navLinks.map((link) => (
               <li key={link.key}>
-                <a href={link.href} className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white uppercase" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.4", letterSpacing: "0.05em" }}>
+                <a href={isLandingPage ? link.href : `${localePrefix}${link.href}`} className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white uppercase" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.4", letterSpacing: "0.05em" }}>
                   {t(`nav.${link.key}`)}
                 </a>
               </li>
@@ -187,7 +187,7 @@ export default function FooterSection() {
           </h3>
           <ul className="mt-4 space-y-2.5">
             <li>
-              <a href="/faq" className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white uppercase" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.4", letterSpacing: "0.05em" }}>
+              <a href={`${localePrefix}/faq`} className="block py-2 md:inline md:py-0 text-[#D6D9DE] transition hover:text-white uppercase" style={{ fontFamily: siteFont, fontSize: "10px", lineHeight: "1.4", letterSpacing: "0.05em" }}>
                 {t("footer.faq")}
               </a>
             </li>

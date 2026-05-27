@@ -3,13 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
-
-export type TestimonialItem = {
-  name: string;
-  role: string;
-  text: string;
-  image: string;
-};
+import type { TestimonialItem } from "@/lib/api/types";
 
 type TestimonialCardProps = {
   testimonial: TestimonialItem;
@@ -55,7 +49,7 @@ export default function TestimonialCard({
 
       {/* Stars fixed at Top Corner */}
       <div className={`absolute top-8 flex items-center gap-[4px] md:top-10 ${isRTL ? "left-8 md:left-10" : "right-8 md:right-10"}`}>
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: testimonial.rating }).map((_, index) => (
           <svg key={index} width="16" height="16" viewBox="0 0 24 24" fill="#C9A96E" className="text-[#C9A96E]">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>

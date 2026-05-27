@@ -8,10 +8,11 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import enMessages from "@/messages/en.json";
 import arMessages from "@/messages/ar.json";
 
-type Locale = "en" | "ar";
+export type Locale = "en" | "ar";
 
 const messages: Record<Locale, typeof enMessages> = {
   en: enMessages,
@@ -43,23 +44,47 @@ const I18nContext = createContext<I18nContextType | null>(null);
 
 const STORAGE_KEY = "xflex-locale";
 
+function getLocaleFromPathname(pathname: string | null): Locale | null {
+  if (!pathname) return null;
+  if (pathname === "/en" || pathname.startsWith("/en/")) return "en";
+  if (pathname === "/ar" || pathname.startsWith("/ar/")) return "ar";
+  return null;
+}
+
+function swapLocaleInPathname(pathname: string, nextLocale: Locale): string {
+  if (pathname === "/" || pathname === "/landing") return `/${nextLocale}`;
+  if (pathname === "/faq") return `/${nextLocale}/faq`;
+  if (pathname === "/en" || pathname.startsWith("/en/")) return pathname.replace(/^\/en(?=\/|$)/, `/${nextLocale}`);
+  if (pathname === "/ar" || pathname.startsWith("/ar/")) return pathname.replace(/^\/ar(?=\/|$)/, `/${nextLocale}`);
+  return `/${nextLocale}`;
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
+  const pathname = usePathname();
+  const router = useRouter();
+  const pathnameLocale = getLocaleFromPathname(pathname);
+  const [storedLocale, setStoredLocale] = useState<Locale>("en");
+  const locale = pathnameLocale ?? storedLocale;
 
   useEffect(() => {
     const saved = (localStorage.getItem(STORAGE_KEY) as Locale | null) ?? "en";
-    const valid: Locale = saved === "ar" ? "ar" : "en";
-    setLocaleState(valid);
-    document.documentElement.lang = valid;
-    document.documentElement.dir = valid === "ar" ? "rtl" : "ltr";
+    setStoredLocale(saved === "ar" ? "ar" : "en");
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, locale);
+    document.documentElement.lang = locale;
+    document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
+  }, [locale]);
 
   const setLocale = useCallback((next: Locale) => {
     localStorage.setItem(STORAGE_KEY, next);
-    setLocaleState(next);
-    document.documentElement.lang = next;
-    document.documentElement.dir = next === "ar" ? "rtl" : "ltr";
-  }, []);
+    setStoredLocale(next);
+
+    if (pathname) {
+      router.push(swapLocaleInPathname(pathname, next));
+    }
+  }, [pathname, router]);
 
   const t = useCallback(
     (key: string): string => {

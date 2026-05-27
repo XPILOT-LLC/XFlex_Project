@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
+import type { PricingPlan } from "@/lib/api/types";
 
 function CheckIcon() {
   return (
@@ -11,17 +12,15 @@ function CheckIcon() {
   );
 }
 
-export default function TaxStructureSection() {
-  const { t, tRaw, isRTL } = useI18n();
+type TaxStructureSectionProps = {
+  plans: PricingPlan[];
+};
+
+export default function TaxStructureSection({ plans }: TaxStructureSectionProps) {
+  const { t, isRTL } = useI18n();
   const fontFamily = isRTL
     ? "var(--font-cairo), Cairo, sans-serif"
     : "var(--font-poppins), Poppins, sans-serif";
-
-  const plans = (tRaw("pricing.plans") as {
-    title: string;
-    price: string;
-    items: string[];
-  }[]) ?? [];
 
   return (
     <motion.section
@@ -99,7 +98,7 @@ export default function TaxStructureSection() {
               </div>
 
               <ul className="relative mt-4 space-y-3">
-                {plan.items.map((item, i) => (
+                  {plan.items.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="mt-[1px] shrink-0"><CheckIcon /></div>
                     <span className="text-white/76" style={{ fontFamily, fontSize: "11px", lineHeight: "1.45" }}>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type TransitionEvent } from "react";
 import { useI18n } from "@/lib/i18n";
+import type { ServiceCard } from "@/lib/api/types";
 
 const clonedCardsPerSide = 4;
 
@@ -47,27 +48,14 @@ function ServiceIcon({ type }: { type: string }) {
 
 const iconTypes = ["document", "clipboard", "bars", "wallet", "layers", "shield"];
 
-export default function ServicesSection() {
+type ServicesSectionProps = {
+  cards: ServiceCard[];
+};
+
+export default function ServicesSection({ cards }: ServicesSectionProps) {
   const { t, isRTL } = useI18n();
   const fontFamily = isRTL ? "var(--font-cairo), Cairo, sans-serif" : "var(--font-poppins), Poppins, sans-serif";
-
-  // Build cards from translations
-  const rawCards = ([] as { title: string; front: string; back: string[] }[]);
-  for (let i = 0; i < 6; i++) {
-    rawCards.push({
-      title: t(`services.cards.${i}.title`),
-      front: t(`services.cards.${i}.front`),
-      back: Array.from({ length: 6 }, (_, j) => t(`services.cards.${i}.back.${j}`)).filter(
-        (v) => !v.includes("services.cards.")
-      ),
-    });
-  }
-
-  const loopedCards = [
-    ...rawCards.slice(-clonedCardsPerSide),
-    ...rawCards,
-    ...rawCards.slice(0, clonedCardsPerSide),
-  ];
+  const rawCards = cards;
 
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(clonedCardsPerSide);
@@ -79,6 +67,19 @@ export default function ServicesSection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const skipAnimationRef = useRef(false);
   const isAnimatingRef = useRef(false);
+
+  useEffect(() => {
+    setActiveCard(null);
+    setCurrentIndex(clonedCardsPerSide);
+  }, [cards]);
+
+  const loopedCards = rawCards.length
+    ? [
+        ...rawCards.slice(-clonedCardsPerSide),
+        ...rawCards,
+        ...rawCards.slice(0, clonedCardsPerSide),
+      ]
+    : [];
 
   const measureTrack = () => {
     const track = trackRef.current;
@@ -140,6 +141,8 @@ export default function ServicesSection() {
     if (nextIndex === currentIndex) return;
     isAnimatingRef.current = true; setIsAnimating(true); setCurrentIndex(nextIndex);
   };
+
+  if (!rawCards.length) return null;
 
   return (
     <section id="services" className="relative overflow-hidden bg-[#020507] px-0 py-20 lg:py-[78px]">

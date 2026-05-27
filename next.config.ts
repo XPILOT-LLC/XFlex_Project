@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "cms.xflex.ae",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "www.figma.com",
         pathname: "/api/mcp/asset/**",
       },
