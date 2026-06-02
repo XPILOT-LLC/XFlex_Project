@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 
+const yearSteps = [2, 5, 7, 10, 12, 15];
+
 export default function HeroSection() {
   const { t, isRTL } = useI18n();
-  const steps = [2, 5, 7, 10, 12, 15];
   const [yearsCount, setYearsCount] = useState(2);
 
   useEffect(() => {
-    const timers = steps.map((value, index) =>
+    const timers = yearSteps.map((value, index) =>
       window.setTimeout(() => {
         setYearsCount(value);
       }, 1900 + index * 320)

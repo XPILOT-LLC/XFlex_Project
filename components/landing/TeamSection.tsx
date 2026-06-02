@@ -19,6 +19,12 @@ const memberImages = [
   "/team member/WhatsApp-Image-2026-03-03-at-12.00.50-AM.jpeg",
 ];
 
+type TeamMember = {
+  name: string;
+  role: string;
+  bullets: string[];
+};
+
 const GlowingStar = ({ className }: { className?: string }) => (
   <div className={`absolute flex items-center justify-center ${className}`}>
     <div className="absolute h-4 w-4 animate-pulse rounded-full bg-white/40 blur-[4px]" />
@@ -35,9 +41,8 @@ export default function TeamSection() {
     ? "var(--font-cairo), Cairo, sans-serif"
     : "var(--font-poppins), Poppins, sans-serif";
 
-  // Robustly fetch members array
   const rawMembers = tRaw("team.members");
-  const members = Array.isArray(rawMembers) ? (rawMembers as any[]) : [];
+  const members = Array.isArray(rawMembers) ? (rawMembers as TeamMember[]) : [];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);

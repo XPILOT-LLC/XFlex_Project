@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type TransitionEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type TransitionEvent } from "react";
 import { useI18n } from "@/lib/i18n";
 import type { ServiceCard } from "@/lib/api/types";
 
@@ -81,7 +81,7 @@ export default function ServicesSection({ cards }: ServicesSectionProps) {
       ]
     : [];
 
-  const measureTrack = () => {
+  const measureTrack = useCallback(() => {
     const track = trackRef.current;
     if (!track) return { step: 0, offset: 0 };
     const firstCard = track.children[0] as HTMLElement | undefined;
@@ -93,7 +93,7 @@ export default function ServicesSection({ cards }: ServicesSectionProps) {
     const paddingStart = Number.parseFloat(isRTL ? styles.paddingRight : styles.paddingLeft) || 16;
     const offset = (document.documentElement.clientWidth - cardWidth) / 2 - paddingStart;
     return { step: cardWidth + gap, offset };
-  };
+  }, [isRTL]);
 
   useEffect(() => {
     const syncStep = () => {
@@ -103,7 +103,7 @@ export default function ServicesSection({ cards }: ServicesSectionProps) {
     syncStep();
     window.addEventListener("resize", syncStep);
     return () => window.removeEventListener("resize", syncStep);
-  }, []);
+  }, [measureTrack]);
 
   useEffect(() => {
     if (!cardStep) return;
@@ -111,7 +111,7 @@ export default function ServicesSection({ cards }: ServicesSectionProps) {
     if (currentIndex === clonedCardsPerSide && !isAnimating) return;
     setIsTransitionEnabled(true);
     setIsAnimating(true);
-  }, [currentIndex, cardStep]);
+  }, [currentIndex, cardStep, isAnimating]);
 
   const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
     if (event.target !== event.currentTarget || event.propertyName !== "transform") return;

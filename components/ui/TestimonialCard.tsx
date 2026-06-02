@@ -58,7 +58,7 @@ export default function TestimonialCard({
 
       <div className="flex flex-col items-center text-center">
         <p className="text-[14.5px] leading-[1.8] text-[#D1D5DB] md:text-[16px]">
-          "{testimonial.text}"
+          &ldquo;{testimonial.text}&rdquo;
         </p>
 
         {/* Name and Role */}

@@ -119,7 +119,7 @@ export default function TestimonialsSection({ testimonials }: TestimonialsSectio
             */}
             <motion.div layout className="pointer-events-none invisible relative mt-10 px-8 pb-12 pt-[100px] w-[90vw] max-w-[340px] md:max-w-[540px] lg:max-w-[760px] md:px-12 md:pb-16 mx-auto">
               <div className="flex flex-col items-center text-center">
-                <p className="text-[14.5px] leading-[1.8] text-[#D1D5DB] md:text-[16px]">"{visibleCards.center.text}"</p>
+                <p className="text-[14.5px] leading-[1.8] text-[#D1D5DB] md:text-[16px]">&ldquo;{visibleCards.center.text}&rdquo;</p>
                 <div className="mt-10">
                   <h4 className="text-[17px] font-bold text-[#C9A96E] md:text-[18px]">{visibleCards.center.name}</h4>
                   <p className="mt-1.5 text-[14px] text-[#8B949E] md:text-[15px]">{visibleCards.center.role}</p>

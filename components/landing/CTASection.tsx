@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { FormEvent, useState } from "react";
 import { useI18n } from "@/lib/i18n";
+
+const CONTACT_FORM_ID = "85";
+const CONTACT_FORM_ENDPOINT = `https://cms.xflex.ae/wp-json/contact-form-7/v1/contact-forms/${CONTACT_FORM_ID}/feedback`;
+const CONTACT_FORM_UNIT_TAG = `wpcf7-f${CONTACT_FORM_ID}-o1`;
 
 const headingEnter = {
   hidden: { opacity: 0, x: 110 },
@@ -26,9 +31,74 @@ const bannerVisual = {
 
 export default function CTASection() {
   const { t, isRTL } = useI18n();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
   const fontFamily = isRTL
     ? "var(--font-cairo), Cairo, sans-serif"
     : "var(--font-poppins), Poppins, sans-serif";
+  const statusMessages = {
+    loading: isRTL ? "جاري إرسال رسالتك..." : "Sending your message...",
+    success: isRTL ? "تم إرسال رسالتك بنجاح." : "Thank you for your message. It has been sent.",
+    error: isRTL ? "تعذر إرسال رسالتك. حاول مرة أخرى." : "We couldn't send your message. Please try again.",
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setSubmissionStatus(null);
+
+    const payload = new FormData();
+    payload.append("_wpcf7", CONTACT_FORM_ID);
+    payload.append("_wpcf7_version", "6.1.3");
+    payload.append("_wpcf7_locale", isRTL ? "ar" : "en_US");
+    payload.append("_wpcf7_unit_tag", CONTACT_FORM_UNIT_TAG);
+    payload.append("_wpcf7_container_post", "0");
+    payload.append("_wpcf7_posted_data_hash", "");
+    payload.append("your-name", formData.name);
+    payload.append("your-email", formData.email);
+    payload.append("your-tel", formData.phone);
+    payload.append("your-message", formData.message);
+
+    try {
+      const response = await fetch(CONTACT_FORM_ENDPOINT, {
+        method: "POST",
+        body: payload,
+      });
+      const result = await response.json();
+
+      if (!response.ok || result.status !== "mail_sent") {
+        setSubmissionStatus({
+          type: "error",
+          message: result.message || statusMessages.error,
+        });
+        return;
+      }
+
+      setSubmissionStatus({
+        type: "success",
+        message: result.message || statusMessages.success,
+      });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch {
+      setSubmissionStatus({ type: "error", message: statusMessages.error });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <section id="cta" className="bg-[#0b0d13]">
@@ -41,34 +111,57 @@ export default function CTASection() {
           <p className="mt-4 text-center text-[1.125rem] leading-7 tracking-[-0.0275rem] text-[#62748E]" style={{ fontFamily }}>
             {t("cta.formSubheading")}
           </p>
-          <form className="mt-12 space-y-4">
+          <form className="mt-12 space-y-4" onSubmit={handleSubmit}>
             <input
               className="h-[3.625rem] w-full rounded-[0.625rem] border border-white/10 bg-white/5 px-6 text-base text-white outline-none"
               placeholder={t("cta.namePlaceholder")}
               style={{ fontFamily }}
+              name="your-name"
+              value={formData.name}
+              onChange={(event) => setFormData((current) => ({ ...current, name: event.target.value }))}
             />
             <input
               className="h-[3.625rem] w-full rounded-[0.625rem] border border-white/10 bg-white/5 px-6 text-base text-white outline-none"
               placeholder={t("cta.emailPlaceholder")}
               style={{ fontFamily }}
+              name="your-email"
+              type="email"
+              value={formData.email}
+              onChange={(event) => setFormData((current) => ({ ...current, email: event.target.value }))}
             />
             <input
               className="h-[3.625rem] w-full rounded-[0.625rem] border border-white/10 bg-white/5 px-6 text-base text-white outline-none"
               placeholder={t("cta.phonePlaceholder")}
               style={{ fontFamily }}
+              name="your-tel"
+              type="tel"
+              value={formData.phone}
+              onChange={(event) => setFormData((current) => ({ ...current, phone: event.target.value }))}
             />
             <textarea
               className="h-[9.625rem] w-full rounded-[0.625rem] border border-white/10 bg-white/5 px-6 py-4 text-base text-white outline-none"
               placeholder={t("cta.messagePlaceholder")}
               style={{ fontFamily }}
+              name="your-message"
+              value={formData.message}
+              onChange={(event) => setFormData((current) => ({ ...current, message: event.target.value }))}
             />
             <button
-              type="button"
+              type="submit"
               className="h-[3.75rem] w-full rounded-[0.625rem] bg-gradient-to-r from-[#FE9A00] to-[#E17100] text-sm font-medium uppercase tracking-[0.0781rem] text-[#0A0A0F]"
               style={{ fontFamily }}
+              disabled={isLoading}
             >
-              {t("cta.sendBtn")}
+              {isLoading ? statusMessages.loading : t("cta.sendBtn")}
             </button>
+            {submissionStatus ? (
+              <p
+                className={submissionStatus.type === "success" ? "text-[#4ADE80]" : "text-[#F87171]"}
+                style={{ fontFamily }}
+              >
+                {submissionStatus.message}
+              </p>
+            ) : null}
           </form>
         </div>
       </div>
