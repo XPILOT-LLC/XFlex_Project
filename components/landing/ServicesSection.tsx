@@ -63,14 +63,20 @@ export default function ServicesSection({ cards }: ServicesSectionProps) {
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [peekOffset, setPeekOffset] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isTransitionEnabled, setIsTransitionEnabled] = useState(false);
+  const [isTransitionEnabled, setIsTransitionEnabled] = useState(true);
   const trackRef = useRef<HTMLDivElement>(null);
-  const skipAnimationRef = useRef(false);
   const isAnimatingRef = useRef(false);
 
   useEffect(() => {
     setActiveCard(null);
+    setIsTransitionEnabled(false);
     setCurrentIndex(clonedCardsPerSide);
+
+    const frame = window.requestAnimationFrame(() => {
+      setIsTransitionEnabled(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [cards]);
 
   const loopedCards = rawCards.length
@@ -105,41 +111,38 @@ export default function ServicesSection({ cards }: ServicesSectionProps) {
     return () => window.removeEventListener("resize", syncStep);
   }, [measureTrack]);
 
-  useEffect(() => {
-    if (!cardStep) return;
-    if (skipAnimationRef.current) { skipAnimationRef.current = false; return; }
-    if (currentIndex === clonedCardsPerSide && !isAnimating) return;
-    setIsTransitionEnabled(true);
-    setIsAnimating(true);
-  }, [currentIndex, cardStep, isAnimating]);
-
   const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
     if (event.target !== event.currentTarget || event.propertyName !== "transform") return;
-    if (currentIndex >= clonedCardsPerSide && currentIndex < clonedCardsPerSide + rawCards.length) {
-      setIsAnimating(false); isAnimatingRef.current = false; return;
-    }
-    setIsTransitionEnabled(false);
-    skipAnimationRef.current = true;
-    setCurrentIndex(currentIndex < clonedCardsPerSide ? rawCards.length + currentIndex : currentIndex - rawCards.length);
-    setIsAnimating(false); isAnimatingRef.current = false;
-  };
 
-  useEffect(() => {
-    if (!isTransitionEnabled) {
-      const frame = window.requestAnimationFrame(() => {
+    let resetIndex: number | null = null;
+
+    if (currentIndex >= clonedCardsPerSide + rawCards.length) {
+      resetIndex = clonedCardsPerSide;
+    } else if (currentIndex < clonedCardsPerSide) {
+      resetIndex = rawCards.length + currentIndex;
+    }
+
+    if (resetIndex !== null) {
+      setIsTransitionEnabled(false);
+      setCurrentIndex(resetIndex);
+
+      window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => setIsTransitionEnabled(true));
       });
-      return () => window.cancelAnimationFrame(frame);
     }
-  }, [isTransitionEnabled]);
+
+    setIsAnimating(false);
+    isAnimatingRef.current = false;
+  };
 
   const scrollByCard = (direction: number) => {
-    if (isAnimatingRef.current || isAnimating || !cardStep) return;
-    const firstVisibleIndex = 1;
-    const lastVisibleIndex = loopedCards.length - 4;
-    const nextIndex = Math.min(Math.max(currentIndex + direction, firstVisibleIndex), lastVisibleIndex);
-    if (nextIndex === currentIndex) return;
-    isAnimatingRef.current = true; setIsAnimating(true); setCurrentIndex(nextIndex);
+    if (isAnimatingRef.current || isAnimating || !cardStep || rawCards.length <= 1) return;
+
+    setActiveCard(null);
+    setIsTransitionEnabled(true);
+    isAnimatingRef.current = true;
+    setIsAnimating(true);
+    setCurrentIndex((index) => index + direction);
   };
 
   if (!rawCards.length) return null;
